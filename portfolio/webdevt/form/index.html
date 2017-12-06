@@ -1,0 +1,241 @@
+<!--©ReynellBobihis-->
+
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta name="theme-color" content='#032639'/>
+<title>assignment_form.validation.with.script</title>
+<style>
+	@font-face { font-family:FontAwesome; src:url('fonts/fontawesome-webfont.eot?v=4.7.0'); src:url('fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg'); font-weight:normal; font-style:normal; }
+	*:focus { outline:none; }
+	* { margin:0px; padding:0px; box-sizing:border-box; font-weight:normal; border:none; text-decoration:none; }
+	html, body { height:100%; }
+	body { font-family:Arial; background-color:#033649; background:linear-gradient(#032639, #f8eddb); background-attachment:fixed; }
+	#footerbackground { width:70%; bottom:0; margin:0 15%; position:fixed; z-index:9999; }
+	form { width:500px; margin:20px 100px 100px auto; padding:30px; background-color:rgba(255,255,255,0); border-radius:5px; color:#fff; }
+		#titlediv { width:100%; text-align:center; position:relative; left:-10px; }
+		#inputdiv { margin:30px 0 0 20px; font-size:18px; }
+			.placeholder { position:absolute; transition:0.2s; z-index:999; opacity:0.5; }
+			.white { position:absolute; z-index:999; cursor:default; }
+			.placeholder:before, .white:before { content:'\00a0\00a0\00a0'; }
+			input { box-shadow:5px 5px 50px rgba(0,0,0,0.2); width:98%; padding:15px 10px 10px 18px; height:45px; margin:7px 5px; background-color:rgba(0,0,0,0.1); border-radius:20px; border:2px solid #fff; color:#fff; font-size:18px; position:relative; top:-15px; left:-20px; }
+			#fninput, #lninput, #phoneinput, #faxinput { width:47%; }
+			#pwinput { width:42%; }
+			#cpwinput { width:52%; }
+			#ageinput { width:25%; }
+			#emailinput { width:69%; }
+			#birthinput { width:42%; }
+			#genderinput { width:52%; }
+			#countryinput { width:56%; }
+			select { background-color:rgba(0,0,0,0); font-size:18px; color:#fff; }
+			#disclaimerinput { width:38%; }
+			input[type='checkbox'] { display:none; }
+			#fdot, #mdot, #ddot, #cdot, #closebutton { font-family:FontAwesome; }
+			#defaultselect { display:none; visibility:hidden; }
+			#rsinput, #sminput { width:47%; top:0px; padding:10px; transition:0.2s; }
+			#rsinput:hover, #sminput:hover { background-color:white; color:#98859f; }
+	#modalwindowdiv { display:none; width:100%; height:110%; background-color:rgba(0,0,0,0.6); position:absolute; top:0px; z-index:99999; }
+		#modalwindow { width:400px; margin:5% auto; box-shadow:5px 5px 40px rgba(0,0,0,0.6); }
+			#modalwindowheader { width:100%; padding:20px; background-color:#263238; text-align:center; color:#fff; }
+				#closebutton { color:#fff; position:relative; right:-60px; top:-10px; cursor:pointer; }
+			#modalwindowbody { width:100%; padding:20px; padding-bottom:35px; background-color:#fff; line-height:40px; color:#000; }
+				.label { padding:8px 30px 8px 30px; background-color:#263238; color:#fff; border-radius:20px; }
+				.userinput { padding:8px 30px 8px 30px; background-color:#eeeeee; color:#000; border-radius:20px; }
+</style>
+<script>
+	var w = '';
+	var y = ['username','password','password confirmation','first name','last name','age','email','phone number','fax number','birth date','website'];
+	var z = ['un','pw','cpw','fn','ln','age','email','phone','fax','birth','ws'];
+	function $(a) { return document.getElementById(a); }                                                      //function to replace document.getElementById() by $()
+	function validate() {
+		for (a=0; a<z.length; a++) {
+			b = $(z[a]+'input').value;
+			h = $(z[a]+'input');
+			if (a!=4 && a!=8 && b.length==0) { alert('The '+y[a]+' field is required.\nPlease fill out all entries with \*.'); h.focus(); return false; }
+			if (a==9 && $('gfinput').checked == false && $('gminput').checked == false) { alert('Please select your gender.'); return false; }
+			if (a==10 && $('cinput').options.selectedIndex == 0) { alert('Please select your country.'); h.focus(); return false; }
+			if (a==10 && $('dinput').checked == false) { alert('Disclaimer is required to be ticked before submitting your information.'); return false; }
+		}
+		for (f=0; f<z.length; f++) if (f!=2) $('x'+z[f]).innerHTML = $(z[f]+'input').value;                     //Write all normal inputs in the modal.
+		$('xbirth').innerHTML = w;                                                                              //Write birthdate in the modal. Variable w is assigned in validatebirth() function.
+		i = $('xphone').innerHTML.replace(/[^0-9]/,'');                                                         //delete all non number characters in phone number input.
+		$('xphone').innerHTML = i.substring(0,2)+' '+i.substring(2,3)+' '+i.substring(3,6)+'-'+i.substring(6);  //Write the phone number in the modal in proper format.
+		if ($('gminput').checked == true) $('xgender').innerHTML = 'Male';                                      //Write male gender in the modal if selected.
+		else if ($('gfinput').checked == true) $('xgender').innerHTML = 'Female';                               //write female gender in the modal if selected.
+		if ($('cinput').options.selectedIndex!=0) $('xcountry').innerHTML = $('cinput').options[$('cinput').options.selectedIndex].text; //Write the selected country in the modal.
+		$('modalwindowdiv').style.display = 'inline';                                                           //Display the modal.
+		return false;                                                                                           //Prevent submit to trigger page reloading.
+	}
+	function validateun(a) {
+		if (a.value.length>20) {
+			alert('Username is too long! Maximum length is 20 characters.');
+			a.select(); a.focus(); }
+		enlarge("unplaceholder","uninput");
+	}
+	function validatepw(a) {
+		if (a.value!='' && (/[0-9]/.test(a.value)==false || /[a-zA-Z]/.test(a.value)==false || /[^a-zA-Z0-9]/.test(a.value)==false)) {
+			alert('Password must contain alphanumeric and special characters.');
+			a.select(); a.focus(); }
+		enlarge("pwplaceholder","pwinput");
+	}
+	function validatecpw(a) {
+		if (a.value!='' && a.value!=$('pwinput').value) {
+		 	alert('Password does not match!');
+ 			a.select(); a.focus(); }
+		enlarge("cpwplaceholder","cpwinput");
+	}
+	function validatefn(a) {
+		if (a.value.length>20) {
+			alert('First Name is too long. Maximum length is 20 characters.');
+			a.select(); a.focus(); }
+		enlarge("fnplaceholder","fninput");
+	}
+	function validateage(a) {
+		if (a.value!='' && (/[^0-9]/.test(a.value)==true || a.value>150)) {
+			alert('Not an age!');
+			a.select(); a.focus(); }
+		enlarge("ageplaceholder","ageinput");
+	}
+	function validateemail(a) {
+		if (a.value!='') {
+			if (/@/.test(a.value)==true && /.com/.test(a.value)==true) {
+				d = a.value.split(/@/);
+				if (d.length!=2 || d[0]=='') { alert('Follow this email format: jsmith@example.com'); a.select(); a.focus(); }
+				else {
+					e = d[1].split(/.com/);
+					if (e.length!=2 || e[0]=='') { alert('Follow this email format: jsmith@example.com'); a.select(); a.focus(); } } }
+			else { alert('Follow this email format: jsmith@example.com'); a.select(); a.focus(); } }
+		enlarge("emailplaceholder","emailinput");
+	}
+	function validatephone(a) {
+		if (a.value!='' && (/[a-zA-Z]/.test(a.value)==true || a.value.replace(/\D/g,'').length!=10)) {
+			alert('Invalid phone number! Follow this format: 63 2 123-4567');
+			a.select(); a.focus(); }
+		enlarge("phoneplaceholder","phoneinput");
+	}
+	function validatebirth(a) {
+		if (a.value!='') {
+			b = a.value.split(/[^0-9]/);
+			if ((b.length!=3 || b[0]=='' || b[1]=='' || b[2]=='' || /[a-zA-Z]/.test(a.value)==true) || (b[0]<1 || b[0]>12 || b[1]<1 || b[1]>31 || b[2]>2016 || (b[2]>99 && b[2]<1900))) {
+				alert('Invalid date. Follow this format: MM/DD/YY');
+				a.select(); a.focus(); }
+			else {
+				b[1]=b[1]*1; b[2]=b[2]*1;                         //to remove leading zeroes.
+				var month = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+				if (b[2]<10) year = '200'+b[2];                   //if the year input is 00,01,03,...
+				else if (b[2]>9 && b[2]<=16) year = '20'+b[2];    //if the year input is 10,11,12,...
+				else if (b[2]>=17 && b[2]<=99) year = '19'+b[2];  //if the year input is 99,98,97,...
+				else year = b[2];                                 //if the year input is 2016,2015,2013,...
+				w = month[b[0]-1]+' '+b[1]+', '+year; } }         //Concatenate the date string.
+		enlarge("birthplaceholder","birthinput");
+	}
+	function validatews(a) {
+		if (a.value!='' && /.com/.test(a.value)==false) {
+			alert('Invalid website. Follow this format: www.example.com');
+			a.select(); a.focus(); }
+		enlarge("wsplaceholder","wsinput");
+	}
+	function closemodal() { $('modalwindowdiv').style.display = 'none'; }           //function that hides the modal
+	function shrink(a) { $(a).style.fontSize = '9px'; }                             //function that makes a placeholder font size smaller
+	function enlarge(a,b) { if ($(b).value == '') $(a).style.fontSize = '18px'; }   //function that makes a placeholder font size normal
+	function enlargeall() {                                                         //function that makes all placeholders font sizes normal, and clears all slections
+		$('ddot').innerHTML = '&#xf10c';
+		$('mdot').innerHTML = '&#xf10c';
+		$('fdot').innerHTML = '&#xf10c';
+		for (a=0; a<z.length; a++) $(z[a]+'placeholder').style.fontSize = '18px';
+	}
+	function dotclicked(a,b,c,d) {                                                  //function for gender selection
+		if ($(b).checked == true) {
+			$(a).innerHTML = '&#xf10c';
+			$(b).checked = false;
+		}
+		else {
+			$(a).innerHTML = '&#xf192';
+			$(b).checked = true;
+			$(c).innerHTML = '&#xf10c';
+			$(d).checked = false;
+		}
+	}
+	function ddotclicked() {                                                        //function for disclaimer checkbox
+		if ($('dinput').checked == true) { a='&#xf10c'; b=false; }
+		else { a='&#xf05d'; b=true; }
+		$('ddot').innerHTML = a;
+		$('dinput').checked = b;
+	}
+	function selecting() { $('cinput').style.color = '#000'; }                      //function that changes options font color (conflict in background color)
+	function doneselecting() { $('cinput').style.color = '#fff'; }                  //function that changes options font color (conflict in background color)
+</script>
+</head>
+
+<body>
+<img id='footerbackground' src='images/city_footer.png'/>
+<form onsubmit='return validate()'>
+	<div id='titlediv'>
+		<h1>Submit Form</h1>
+	</div>
+	<div id='inputdiv'>
+		<span class='placeholder' id='unplaceholder' onclick='$("uninput").focus()'>Username &#42</span>
+		<input type='text' id='uninput' onfocus='shrink("unplaceholder")' onblur='validateun(this)'/>
+		<span class='placeholder' id='pwplaceholder' onclick='$("pwinput").focus()'>Password &#42</span>
+		<input type='password' id='pwinput' onfocus='shrink("pwplaceholder")' onblur='validatepw(this)'/>
+		<span class='placeholder' id='cpwplaceholder' onclick='$("cpwinput").focus()'>Confirm Password &#42</span>
+		<input type='password' id='cpwinput' onfocus='shrink("cpwplaceholder")' onblur='validatecpw(this)'/>
+		<span class='placeholder' id='fnplaceholder' onclick='$("fninput").focus()'>First Name &#42</span>
+		<input type='text' id='fninput' onfocus='shrink("fnplaceholder")' onblur='validatefn(this)'/>
+		<span class='placeholder' id='lnplaceholder' onclick='$("lninput").focus()'>Last Name</span>
+		<input type='text' id='lninput' onfocus='shrink("lnplaceholder")' onblur='enlarge("lnplaceholder","lninput")'/>
+		<span class='placeholder' id='ageplaceholder' onclick='$("ageinput").focus()'>Age &#42</span>
+		<input type='text' id='ageinput' onfocus='shrink("ageplaceholder")' onblur='validateage(this)'/>
+		<span class='placeholder' id='emailplaceholder' onclick='$("emailinput").focus()'>Email &#42</span>
+		<input type='text' id='emailinput' onfocus='shrink("emailplaceholder")' onblur='validateemail(this)'/>
+		<span class='placeholder' id='phoneplaceholder' onclick='$("phoneinput").focus()'>Phone Number &#42</span>
+		<input type='text' id='phoneinput' onfocus='shrink("phoneplaceholder")' onblur='validatephone(this)'/>
+		<span class='placeholder' id='faxplaceholder' onclick='$("faxinput").focus()'>Fax Number</span>
+		<input type='text' id='faxinput' onfocus='shrink("faxplaceholder")' onblur='enlarge("faxplaceholder","faxinput")'/>
+		<span class='placeholder' id='birthplaceholder' onclick='$("birthinput").focus()'>Date of Birth &#42</span>
+		<input type='text' id='birthinput' onfocus='shrink("birthplaceholder")' onblur='validatebirth(this)'/>
+		<span class='white'>Gender:&nbsp;&nbsp;&nbsp;<span onclick='dotclicked("mdot","gminput","fdot","gfinput")'><big><span id='mdot'>&#xf10c;</span></big> M</span>&nbsp;&nbsp;&nbsp;<span onclick='dotclicked("fdot","gfinput","mdot","gminput")'><big><span id='fdot'>&#xf10c;</span></big> F</span></span>
+		<input type='text' disabled id='genderinput'/>
+		<input type='checkbox' id='gminput'/><input type='checkbox' id='gfinput'/>
+		<span class='placeholder' id='wsplaceholder' onclick='$("wsinput").focus()'>Website &#42</span>
+		<input type='text' id='wsinput' onfocus='shrink("wsplaceholder")' onblur='validatews(this)'/>
+		<span class='white'>Country: <!--<big> </big><span id='cv'><span id='cvisible'>Choose</span>&nbsp;<big><span id='cdot'></span></big></span> &#xf13a;-->
+		<select id='cinput' onfocus='selecting()' onfocusout='doneselecting()'>
+			<option value='' id='defaultselect'>Choose &#42</option>
+			<option value='PH'>Philippines </option>
+			<option value='SG'>Singapore</option>
+			<option value='MY'>Malaysia</option>
+			<option value='TH'>Thailand</option>
+			<option value='CN'>China</option>
+			<option value='KR'>Korea</option>
+		</select>
+		</span>
+		<input type='text' disabled id='countryinput'/>
+		<span class='white' onclick='ddotclicked()'>Disclaimer:&nbsp;<big><span id='ddot'>&#xf10c;</span></big></span>
+		<input type='checkbox' id='dinput'/>
+		<input type='text' disabled id='disclaimerinput'/>
+		<input type='reset' id='rsinput' value='Reset' onclick='enlargeall()'/>
+		<input type='submit' id='sminput' value='Submit'/>
+	</div>
+</form>
+<div id='modalwindowdiv'>
+	<div id='modalwindow'>
+		<h2 id='modalwindowheader'>YOUR INFORMATION<span id='closebutton' onclick='closemodal()'>&#xf057;</span></h2>
+		<div id='modalwindowbody'>
+			<p><span class='label'>Username:      </span><span class='userinput' id='xun'></span></p>
+			<p><span class='label'>Password:      </span><span class='userinput' id='xpw'></span></p>
+			<p><span class='label'>Name:          </span><span class='userinput'><span id='xfn'></span>&nbsp;<span id='xln'></span></span></p>
+			<p><span class='label'>Age:           </span><span class='userinput' id='xage'></span></p>
+			<p><span class='label'>Email:         </span><span class='userinput' id='xemail'></span></p>
+			<p><span class='label'>Phone Number:  </span><span class='userinput' id='xphone'></span></p>
+			<p><span class='label'>Fax Number:    </span><span class='userinput' id='xfax'></span></p>
+			<p><span class='label'>Date of Birth: </span><span class='userinput' id='xbirth'></span></p>
+			<p><span class='label'>Gender:        </span><span class='userinput' id='xgender'></span></p>
+			<p><span class='label'>Website:       </span><span class='userinput' id='xws'></span></p>
+			<p><span class='label'>Country:       </span><span class='userinput' id='xcountry'></span></p>
+		</div>
+	</div>
+</div>
+</body>
+</html>

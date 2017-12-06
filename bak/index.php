@@ -1,43 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Reynell C. Bobihis</title>
-	<meta name="theme-color" content="#001725"/>
-	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
-	<meta http-equiv="cache-control" content="max-age=0" /> <meta http-equiv="cache-control" content="no-cache" /> <meta http-equiv="expires" content="0" /> <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" /> <meta http-equiv="pragma" content="no-cache" />
+	<title>HireReynell</title>
+	<meta name="theme-color" content='#001725'/>
 	<script type='text/javascript' src='js/custom.js'></script>
 	<link rel="stylesheet" type="text/css" href="css/custom.css"/>
 </head>
 <body>
 	<header>
 		<div id='headerdiv'>
-			<div id='headerlogodiv'>
-				<h3>REYNELL BOBIHIS</h3>
-				<button id='menu-bar' onclick='toggleMenu()'>
-					<span class='menu-icon-bar'></span>
-					<span class='menu-icon-bar'></span>
-					<span class='menu-icon-bar'></span>
-				</button>
-			</div>
+			<div id='headerlogodiv'><h3>REYNELL BOBIHIS</h3></div>
 			<nav>
 				<ul>
-					<li id='headernavhome' onclick='autoscrollto("headerdiv"); toggleMenu();'>Home</li>
-					<li id='headernavabout' onclick='autoscrollto("aboutsection"); toggleMenu();'>About</li>
-					<li id='headernavcontact' onclick='autoscrollto("personalinfosection"); toggleMenu();'>Contact</li>
-					<li id='headernavskills' onclick='autoscrollto("skillssection"); toggleMenu();'>Skills</li>
-					<li id='headernavexperience' onclick='autoscrollto("experiencesection"); toggleMenu();'>Experience</li>
+					<li id='headernavhome' onclick='autoscrollto("headerdiv");'>Home</li>
+					<li id='headernavabout' onclick='autoscrollto("aboutsection");'>About</li>
+					<li id='headernavcontact' onclick='autoscrollto("personalinfosection");'>Contact</li>
+					<li id='headernavskills' onclick='autoscrollto("skillssection");'>Skills</li>
+					<li id='headernavexperience' onclick='autoscrollto("experiencesection");'>Experience</li>
 				</ul>
 			</nav>
 		</div>
 	</header>
 	<div id='jumbotron'>
-		<h1 id='jumbotronh1'><span class="show-mobile">I'm Reynell Bobihis<span class="jumbotrondotstyle">.</span></span><span class="hide-mobile">I design<span class='jumbotrondotstyle'>.</span> I create<span class='jumbotrondotstyle'>.</span></span></h1>
+		<h1 id='jumbotronh1'>I design<span class='jumbotrondotstyle'>.</span> I create<span class='jumbotrondotstyle'>.</span></h1>
 		<button id='jumbotronbutton' onclick='autoscrollto("portfoliosectiondiv");'>View Portfolio</button>
 	</div>
 	<section id='aboutsection'>
 		<div id='aboutsectiondiv'>
 			<h2>Welcome to my website.</h2>
-			<p>Hi! I'm Reynell and I am a computer engineering student. I am a web developer and graphic designer creating awesome and effective visual identities for companies of all sizes. Scroll down to know me more!</p>
+			<p>Hi! I am Reynell Cortiguierra Bobihis<br/>and I am a computer engineering student.<br/>I am a web developer.<br/>I also create graphic arts. <br/>Scroll down to know me more.</p>
 		</div>
 	</section>
 	<section id='personalinfosection'>
@@ -45,7 +36,7 @@
 			<h2 class='sectionheader'>Personal Information</h2>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Contact<br class="hide-mobile"/><span class="show-mobile"> </span>Information</h3>
+					<h3>Contact<br/>Information</h3>
 				</div>
 				<aside class='sectionaside'>
 					<div class='contactinfolabel'><span class='icon'>&#xf041;</span></div><p class='contactinfo'>Jose Abad Santos St., Sta. Mesa, Manila</p>
@@ -55,7 +46,7 @@
 			</div>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Scholastic<br class="hide-mobile"/><span class="show-mobile"> </span>Background</h3>
+					<h3>Scholastic<br/>Background</h3>
 				</div>
 				<aside id='scholasticbackgroundaside' class='sectionaside'>
 					<p><span class='bold'>Polytechnic University of the Philippines &#40;Manila&#41;</span></p>
@@ -65,7 +56,7 @@
 			</div>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>More<br class="hide-mobile"/><span class="show-mobile"> </span>Information</h3>
+					<h3>More<br/>Information</h3>
 				</div>
 				<aside id='moreinfoaside' class='sectionaside'>
 					<p><span class='bold'>Birthdate&#58; </span>December 20, 1996</p>
@@ -130,7 +121,7 @@
 			<h2 class='sectionheader'>Portfolio</h2>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Web<br class="hide-mobile"/><span class="show-mobile"> </span>Development</h3>
+					<h3>Web<br/>Development</h3>
 				</div>
 				<aside id='webdevtaside' class='sectionaside'>
 					<div id='webdevtthumbnaildiv'>
@@ -149,7 +140,7 @@
 			</div>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Graphic<br class="hide-mobile"/><span class="show-mobile"> </span>Arts</h3>
+					<h3>Graphic<br/>Arts</h3>
 				</div>
 				<aside id='graphicsaside' class='sectionaside'>
 					<div id='graphicsnav'>
@@ -217,7 +208,7 @@
 			<h2 class='sectionheader'>Experience</h2>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Work<br class="hide-mobile"/><span class="show-mobile"> </span>Experience</h3>
+					<h3>Work<br/>Experience</h3>
 				</div>
 				<aside id='workexperienceaside' class='sectionaside'>
 					<div>
@@ -226,14 +217,9 @@
 						<p><em>Intern</em> &#40;April 25, 2017 &ndash; June 23, 2017&#41;</p>
 					</div>
 					<div>
-						<p><span class='bold'>IBM Business Services, Inc.</span></p>
-						<p>16F CyberOne Building, Eastwood City Cyberpark<br/>Libis, Quezon City</p>
-						<p><em>Intern</em> &#40;May 2, 2016 &ndash; August 7, 2016&#41;</p>
-					</div>
-					<div>
-						<p><span class='bold'>Center for Engineering and Technology Research</span></p>
-						<p>PUP Manila</p>
-						<p><em>Student Assistant</em> &#40;June 8, 2015 &ndash; October 15, 2016&#41;</p>
+						<p><span class='bold'>DOTC Government Internship Program</span></p>
+						<p>The Columbia Tower, Ortigas Avenue<br/>Barangay Wack-Wack, Mandaluyong City</p>
+						<p><em>Intern</em> &#40;Apr 3, 2014 &ndash; May 30, 2014&#41;</p>
 					</div>
 					<div>
 						<p><span class='bold'>ACTS Achi &amp; Ahia, Inc.</span></p>
@@ -241,15 +227,20 @@
 						<p><em>Encoder&#47Clerk</em> &#40;Mar 27, 2015 &ndash; Jun 6, 2015&#41;</p>
 					</div>
 					<div>
-						<p><span class='bold'>DOTC Government Internship Program</span></p>
-						<p>The Columbia Tower, Ortigas Avenue<br/>Barangay Wack-Wack, Mandaluyong City</p>
-						<p><em>Intern</em> &#40;Apr 3, 2014 &ndash; May 30, 2014&#41;</p>
+						<p><span class='bold'>Center for Engineering and Technology Research</span></p>
+						<p>PUP Manila</p>
+						<p><em>Student Assistant</em> &#40;June 8, 2015 &ndash; October 15, 2016&#41;</p>
+					</div>
+					<div>
+						<p><span class='bold'>IBM Business Services, Inc.</span></p>
+						<p>16F CyberOne Building, Eastwood City Cyberpark<br/>Libis, Quezon City</p>
+						<p><em>Intern</em> &#40;May 2, 2016 &ndash; August 7, 2016&#41;</p>
 					</div>
 				</aside>
 			</div>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Seminars<br class="hide-mobile"/><span class="show-mobile"> </span>Attended</h3>
+					<h3>Seminars<br/>Attended</h3>
 				</div>
 				<aside id='seminarsaside' class='sectionaside'>
 					<div>
@@ -262,7 +253,7 @@
 			</div>
 			<div class='sectionasidediv'>
 				<div class='sectionasideheader'>
-					<h3>Achievements<br class="hide-mobile"/><span class="show-mobile"> </span>Earned</h3>
+					<h3>Achievements<br/>Earned</h3>
 				</div>
 				<aside id='achievementsaside' class='sectionaside'>
 					<div>

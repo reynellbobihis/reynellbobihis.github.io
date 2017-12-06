@@ -1,0 +1,160 @@
+@font-face { font-family:FontAwesome; src:url('../fonts/fontawesome-webfont.eot?v=4.7.0'); src:url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg'); font-weight:normal; font-style:normal; }
+@font-face { font-family:Roboto; src:url('../fonts/Roboto-Regular-webfont.woff') format('woff'); font-weight:normal; font-style:normal; }
+@font-face { font-family:'Open Sans'; src:url('../fonts/OpenSans-Regular-webfont.woff') format('woff'); font-weight:normal; font-style:normal; }
+*:focus { outline:none; }
+* { margin:0px; padding:0px; box-sizing:border-box; font-weight:normal; border:none; }
+button, a, a * { text-decoration:none; cursor:pointer; }
+body { font-family:'Open Sans'; }
+.icon { font-family:FontAwesome; cursor:default; }
+
+body > div { cursor:default!important; }
+header { width:100%; background-color:#001725; position:fixed; z-index:1000; }
+	#headerdiv { width:95%; max-width:1000px; margin:40px auto 0 auto; color:#fff; transition:0.2s; }
+		#headerlogodiv { margin-right:auto; padding:10px 25px; float:left; font-weight:bold; position:absolute; width:100%; }
+			#headerlogodiv h3 { font-weight:bold; float:left; }
+			#menu-bar { float:right; background:none; border-radius:0; }
+				#menu-bar .menu-icon-bar { display:block; width:25px; height:3px; margin:4px; background-color:white; transition:0.2s; }
+				#menu-bar.opened .menu-icon-bar:first-child { transform:rotate(45deg); transform-origin:8.2% 0; }
+				#menu-bar.opened .menu-icon-bar:not(:first-child):not(:last-child) { opacity:0; }
+				#menu-bar.opened .menu-icon-bar:last-child { transform:rotate(-45deg); transform-origin:8.2% 100%; }
+		nav { padding:20px 0; margin:5px; }
+		nav.opened { padding-top:80px; }
+			nav ul { text-align:center; overflow:hidden; height:0; }
+			nav.opened ul { height:100vh; }
+				nav ul li { display:block; margin:20px; transition:0.5s; font-weight:bold; }
+				nav ul li.active { color:orange; }
+#jumbotron { width:100%; height:100vh; background-color:#001725; padding-top:25vh; text-align:center; }
+	#jumbotron h1 { width:95%; max-width:1000px; margin:30px auto; font-family:Roboto; font-size:50px; color:#fff; }
+		.hide-mobile { display:none; }
+		.jumbotrondotstyle { color:#ffb900; }
+	#jumbotron > button { display:inline; padding:15px 20px; background-color:rgba(0,0,0,0); font-size:20px; color:#fff; border:2px solid rgba(255,255,255,0.1); transition:0.2s; }
+	#jumbotron > button:hover { border:2px solid rgba(255,255,255,0.8); }
+	.error404-message { color:white; font-size:40px; padding:10px; }
+		.error404-message a, .error404-message a:visited, .error404-message a:focus { color:white; text-decoration:underline; }
+section { width:100%; }
+	section > div { opacity:0; transition:0.7s ease-in-out; }
+#aboutsection { padding:40px 0; display:table; }
+	#aboutsectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; display:table-cell; vertical-align:middle; }
+		#aboutsectiondiv h2 { font-weight:bold; margin-bottom:5vh; }
+		#aboutsectiondiv p { margin-bottom:10px; margin-right:10vw; margin-left:10vw; color:#aaa; }
+#personalinfosection { background-color:#f1f1f1; }
+	#personalinfosectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; padding:10vh 0; overflow:auto; }
+		.sectionheader { font-weight:bold; text-align:center; margin-bottom:5vh; }
+		.sectionasidediv { overflow:auto; margin-bottom:40px; }
+			.sectionasideheader { padding:20px 5vw; float:left; text-align:right; }
+				.sectionasideheader h3 { font-weight:bold; padding:10px 20px; border-left:5px solid orange; }
+			.sectionaside { margin:0 5vw; float:left; text-align:left; }
+				.contactinfolabel { width:40px; height:40px; border-radius:25px; text-align:center; background-color:#e5e5e5; margin:5px; padding:7px; font-size:20px; color:#001725; float:left; clear:left; }
+				.contactinfo { float:left; margin:12px 8px; max-width:calc(80vw - 66px); }
+			#scholasticbackgroundaside { padding-top:20px; padding-bottom:20px; }
+					.bold { font-weight:bold; }
+			#moreinfoaside { padding-top:20px padding-bottom:20px; }
+				.asidewithicondiv { margin:10px 0; }
+					.asidewithiconlabel { float:left; padding:15px; padding-left:0; width:100%; clear:both; }
+					.interestsdiv { float:left; width:50px; height:50px; overflow:hidden; transition:0.2s; }
+					.interestsdiv:hover { width:230px; }
+						.interestsicon { width:40px; height:40px; border-radius:25px; text-align:center; background-color:#e5e5e5; margin:5px; padding:7px; font-size:20px; color:#001725; float:left; transition:0.1s; cursor:default; }
+						.interestsicon:hover { background-color:#001725 ; color:#e5e5e5; }
+						.interests { float:left; margin:12px 8px; }
+						.socialmediaicondiv { width:40px; height:40px; border-radius:25px; text-align:center; background-color:#e5e5e5; margin:5px; padding:7px; font-size:20px; color:#001725; float:left; position:relative; bottom:0px; transition:0.1s; cursor:pointer; }
+						.socialmediaicondiv, .socialmediaicondiv > * { cursor:pointer; }
+							.socialmediaicondiv.facebook:focus { bottom:6px; background-color:#3b5998 ; color:#e5e5e5; }
+							.socialmediaicondiv.twitter:focus { bottom:6px; background-color:#55acee ; color:#e5e5e5; }
+							.socialmediaicondiv.linkedin:focus { bottom:6px; background-color:#007bb6 ; color:#e5e5e5; }
+							.socialmediaicondiv.lastfm:focus { bottom:6px; background-color:#c3000d ; color:#e5e5e5; }
+							.socialmediaicondiv.spotify:focus { bottom:6px; background-color:#6AE368 ; color:#000; }
+#skillssection { }
+	#skillssectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; padding:10vh 0; overflow:auto; }
+		#skillscard { width:90vw; max-width:320px; margin:0 auto; padding:15px; background-color:#f5f5f5; border-radius:7px; }
+			.progressdiv { width:100%; padding:5px; overflow:auto; }
+				.progresslabeldiv { width:60%; float:left; text-align:right; }
+				.progressbardiv { width:40%; padding-left:20px; float:left; }
+					.progressbardiv div { width:8%; height:15px; margin:2px 1%; float:left; background-color:#001725; }
+					.progressbardiv .empty { background-color:orange; }
+		#skillscaption { width:100%; margin:0 auto; padding:20px 5vw; text-align:center; }
+	#portfoliosectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; padding:10vh 0; overflow:auto; }
+		#portfoliosectiondiv .sectionasideheader { width:30%; }
+		#portfoliosectiondiv .sectionaside { width:70%; }
+			#webdevtaside { padding:10px 50px 30px 40px; }
+				#webdevtthumbnaildiv { padding-right:50px; overflow:auto; }
+					.webdevtimgdivdiv { width:45%; height:200px; margin-right:5%; padding:10px; float:left; border:1px solid #aaa; border-radius:5px; }
+					.webdevtimgdivdiv.lightbox { position: fixed; top: 0px; left: 0px; margin: 0 auto; padding: 30px; width: 100%!important; z-index: 9999; background-color: rgba(255, 255, 255, 0.8); height: 100vh!important; display: flex; align-items: center; justify-content: center; }
+					.webdevtimgdivdiv:hover { border:1px solid #001725; }
+						#webdevtimgdiv { width:100%; height:100%; background:url(/portfolio/webdevt/thumb_socialstreat.png) no-repeat center center; background-size:cover; cursor:pointer; }
+					#webdevtcaptiondiv { width:50%; height:200px; float:left; }
+						#webdevtcaptiondiv h4 { margin:10px 0; font-weight:bold; font-size:25px; }
+						#webdevtcaptiondiv p { font-style:italic; }
+				#offshorlythumbnaildiv, #trekweblogthumbnaildiv, #formthumbnaildiv, #socialstreatthumbnaildiv, #quizgamethumbnaildiv { display:none; }
+				#webdevtfilmstripdiv { width:100%; overflow:auto; margin-top:20px; }
+					#webdevtfilmstripdiv .webdevtimgdivdiv { width:15%; height:60px; margin-right:1%; padding:5px; border-radius:2px; }
+						#webdevtfilmstripdiv .webdevtimgdivdiv div { opacity:0.3; width:100%; height:100%; background-size:cover; }
+							#webdevtfilmstripdiv .webdevtimgdivdiv div:hover { opacity:1; }
+						#webdevtimgdivsocialstreat { background:url(/portfolio/webdevt/thumb_thumb_socialstreat.png) no-repeat center center; }
+						#webdevtimgdivoffshorly { background:url(/portfolio/webdevt/thumb_thumb_offshorly.png) no-repeat center center; }
+						#webdevtimgdivbioquick { background:url(/portfolio/webdevt/thumb_thumb_bioquick.png) no-repeat center center; }
+						#webdevtimgdivknowledge360 { background:url(/portfolio/webdevt/thumb_thumb_knowledge360.png) no-repeat center center; }
+						#webdevtimgdivtrekweblog { background:url(/portfolio/webdevt/thumb_thumb_trekweblog.png) no-repeat center center; }
+						#webdevtimgdivform { background:url(/portfolio/webdevt/thumb_thumb_form.png) no-repeat center center; }
+			#graphicsaside { padding:10px 50px 30px 40px; }
+				#graphicsnav { width:100%; margin-bottom:30px; overflow:auto; text-align:center; cursor:pointer; }
+					#graphicsnav div { float:left; padding:5px 20px; transition:0.2s; }
+					#graphicsnavad { font-weight:bold; background-color:#f5f5f5; }
+				.graphicsdiv { width:100%; }
+					.graphicsdiv > .webdevtimgdivdiv { width:30%; height:auto; margin:0 3% 20px 0; text-align:center; }
+						.graphicsdiv > .webdevtimgdivdiv > img { max-width:100%; max-height:100%; cursor:pointer; }
+						#graphicsinfographics > div { height:265px; }
+						#graphicsad > div { height:80px; }
+						#graphicslogo > div { height:120px; }
+						#graphicsicon > div { height:130px; }
+						#graphicsbanner > div { height:70px; }
+						#graphicscertificate > div { height:110px; }
+				#graphicsinfographics, #graphicslogo, #graphicsicon, #graphicscertificate, #graphicsbanner { display:none; }
+#experiencesection { background-color:#f1f1f1; }
+	#experiencesectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; padding:10vh 0; overflow:auto; }
+			#workexperienceaside, #seminarsaside, #achievementsaside { padding:20px 0 0 40px; overflow:auto; }
+				#workexperienceaside > div, #seminarsaside > div, #achievementsaside > div { margin-bottom:25px; }
+#otherssection { background-color:#001725; }
+	#otherssectiondiv { width:95%; max-width:1000px; margin:0 auto; text-align:center; padding:15px 0 25px 0; overflow:auto; }
+		#otherssectiondiv > p { color:#fff; }
+
+@media(min-width:480px) {
+
+}
+
+@media(min-width:768px) {
+		#headerlogodiv { position:fixed; width:auto; }
+			#menu-bar { display:none; }
+		nav { margin-left:auto; padding:10px 0; float:right; }
+			nav ul { overflow:visible; height:auto; }
+				nav ul li { display:inline; margin:5px; padding:10px 20px; transition:0.2s; cursor:pointer; border-bottom:5px solid transparent; font-weight:normal; }
+				nav ul li.active { color:white; border-color:orange; }
+				nav ul li:hover { border-bottom:5px solid orange; }
+	#jumbotron h1 { font-size:120px; }
+		.show-mobile { display:none; }
+		.hide-mobile { display:block; }
+#aboutsection { padding:150px 5vw; }
+#personalinfosection { }
+			.sectionasideheader { width:40%; }
+				.sectionasideheader h3 { padding:0; border:none; }
+			.sectionaside { float:right; margin:0; width:60%; padding-left:20px; float:left; text-align:left; border-left:5px solid orange; }
+				.sectionaside .contactinfo { max-width:initial; }
+							.socialmediaicondiv.facebook:hover { bottom:6px; background-color:#3b5998 ; color:#e5e5e5; }
+							.socialmediaicondiv.twitter:hover { bottom:6px; background-color:#55acee ; color:#e5e5e5; }
+							.socialmediaicondiv.linkedin:hover { bottom:6px; background-color:#007bb6 ; color:#e5e5e5; }
+							.socialmediaicondiv.lastfm:hover { bottom:6px; background-color:#c3000d ; color:#e5e5e5; }
+							.socialmediaicondiv.spotify:hover { bottom:6px; background-color:#6AE368 ; color:#000; }
+			#moreinfoaside { }
+					.asidewithiconlabel { width:initial; }
+#skillssection { }
+	#skillssectiondiv { }
+		#skillscard { width:30%; max-width:initial; margin:0 5% 0 20%; float:left; }
+		#skillscaption { width:25%; margin:20px 20% 20px 0; padding:0; text-align:left; float:left; }
+}
+
+@media(min-width:920px) {
+
+}
+
+@media(min-width:1200px) {
+
+}

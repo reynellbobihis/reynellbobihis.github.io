@@ -1,0 +1,43 @@
+<!--©ReynellBobihis-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="files/Styles.css">
+  <title>Quiz Game</title>
+</head>
+
+<body onload="onStart()">
+	<header id="header"><input id="title" type="text" onfocus="this.select()"></header>
+	<section id="section">
+		<input id="textBox" type="text" onkeypress="myFunction(event)" onblur="this.focus()" onfocusout="this.focus()">
+		<div id="main">
+			<span id="demo"></span><span id="counter"></span><img id="loadingImg" src="files/Images/loadingAnimation.gif"/>
+		</div>
+		<button class="myButtons" id="reseter" onclick="reseter()">RESET</button>
+		<button class="myButtons" id="openSettings" onclick="openSettings()">SETUP</button>
+	</section>
+	<section id="settings">
+		<p>
+			<input class="names" id="nP1" type="text" maxlength="24" placeholder="Name of Player 1" onfocus="this.select()"><span id="colon">:</span><input class="colors" id="cP1" type="text" maxlength="16" placeholder="Color" onfocus="this.select()"><br/>
+			<input class="names" id="nP2" type="text" maxlength="24" placeholder="Name of Player 1" onfocus="this.select()"><span id="colon">:</span><input class="colors" id="cP2" type="text" maxlength="16" placeholder="Color" onfocus="this.select()"> <br/>
+			<input class="names" id="nP3" type="text" maxlength="24" placeholder="Name of Player 1" onfocus="this.select()"><span id="colon">:</span><input class="colors" id="cP3" type="text" maxlength="16" placeholder="Color" onfocus="this.select()"><br/>
+			<input class="names" id="nP4" type="text" maxlength="24" placeholder="Name of Player 1" onfocus="this.select()"><span id="colon">:</span><input class="colors" id="cP4" type="text" maxlength="16" placeholder="Color" onfocus="this.select()"> <br/>
+			<input class="names" id="nP5" type="text" maxlength="24" placeholder="Name of Player 1" onfocus="this.select()"><span id="colon">:</span><input class="colors" id="cP5" type="text" maxlength="16" placeholder="Color" onfocus="this.select()"><br/>
+			<input class="iTimerLabel" id="iTimerLeft" type="text" value="Timer: " readonly><input id="iTimer" type="text" maxlength="3" onfocus="this.select()">
+			<input class="iTimerLabel" id="iTimerRight" type="text" value="seconds" readonly><br/>
+			<span id="showHelp"><a onclick="showHelp()">Show Help</a></span>
+			<span id="hideHelp"><a onclick="hideHelp()">Hide Help</a><br/></span>
+			<span id="help">Players may use keys 1 to 5 to answer.<br/>Other keys: 6 - reset; 7 - wrong; 8 - right.<br/>In selecting colors, use only<br/>these <a href="files/Color Names.html" target="_blank">color names</a>.<br/></span><br/><br/>
+			<button class="myButtons" id="makeDefaultButton" onclick="makeDefault()">SAVE AS DEFAULT</button>
+		</p>
+		<div id="saveCancel">
+			<button class="myButtons" id="closeSettings" onclick="closeSettings()">CANCEL</button>
+			<button class="myButtons" id="saveSettings" onclick="saveSettings()">SAVE</button>
+		</div>
+	</section>
+	<script src="files/Script.js"></script>
+</body>
+
+</html>

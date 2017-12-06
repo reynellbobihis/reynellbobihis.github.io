@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Knowledge360 - Home</title>
+	<meta name="theme-color"               content='#131313'/>
+	<meta name="viewport"                  content="width=device-width"/>
+	<!--
+	<meta property="og:url"                content="https://knowledge360.000webhostapp.com/" />
+	<meta property="og:type"               content="article" />
+	<meta property="og:title"              content="Knowledge360 Home" />
+	<meta property="og:description"        content="Share resources from across the world" />
+	<meta property="og:image"              content="https://knowledge360.000webhostapp.com/images/banner-bg.jpg" />
+	<meta property="og:site-name"          content="Knowledge360" />
+    -->
+	<style>
+		@font-face { font-family:FontAwesome; src:url('fonts/fontawesome-webfont.eot?v=4.7.0'); src:url('fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg'); font-weight:normal; font-style:normal; }
+		*:focus { outline:none; }
+		* { margin:0px; padding:0px; box-sizing:border-box; font-weight:normal; border:none; }
+		a, a * { text-decoration:none; cursor:pointer; }
+		body { font-family:Arial; }
+		.icon { font-family:FontAwesome; }
+		::-webkit-input-placeholder { color: #444; }
+		::-moz-placeholder {color: #444; }
+		:-ms-input-placeholder { color: #444; } 
+		:-o-input-placeholder { color: #444; } 
+
+		#loginsignupmodaldiv { display:none; width:100%; height:100%; background-color:rgba(0,0,0,0.6); position:absolute; top:0px; z-index:99999; }
+		#loginsignupmodaldiv * { transition:0.5s; }
+			#loginsignupmodal { width:300px; margin:10% auto; box-shadow:5px 5px 40px rgba(0,0,0,0.6); border-radius:4px; }
+					#togglelogin { width:50%; padding:20px; background-color:#fff; color:#002d3c; font-size:17px; cursor:pointer; border-radius:4px 0 0 0; }
+					#togglesignup { width:50%; padding:20px; background-color:#e7e7e7; color:#5e818c; font-size:17px; cursor:pointer; border-radius:0 4px 0 0; }
+				#signupformdiv { display:none; }
+					#loginform, #signupform { width:100%; padding:20px; background-color:#fff; border-radius:0 0 4px 4px; }
+						#liusername, #lipassword, #suusername, #supassword, #suconfirmpassword { width:100%; margin:5px 0; padding:10px; border:2px solid #ccc; border-radius:2px; }
+							#liusername:hover, #lipassword:hover, #suusername:hover, #supassword:hover, #suconfirmpassword:hover { border:2px solid #000; }
+						#lisubmit, #susubmit, .cancel { width:100%; margin:12px 0 5px 0; padding:10px; background-color:#0c475b; color:#fff; cursor:pointer; border:2px solid #0c475b; border-radius:2px; }
+						.cancel { margin:5px 0; }
+							#lisubmit:hover, #susubmit:hover, .cancel:hover { background-color:#000; border:2px solid #000; }
+		#headerdivdiv { background: url(images/intro-bg.jpg) no-repeat center center; background-size: cover; }
+		#headerdiv * { transition:0.2s; }
+		#headerdiv { position:fixed; top:0px; width:100%; padding:10px; z-index:9999; transition:0.2s; }
+			header { box-sizing:initial; width:950px; margin:0 auto; overflow:auto; position:relative; }
+				#logodiv { float:left; width:60%; padding:10px 0 5px 0; }
+					#logo { height:28px; margin-right:10px; float:left; }
+					#logodivh1 { color:#fff; float:left; }
+				nav { text-align:right; padding:10px 0; float:right; position:absolute; bottom:0; right:0; }
+					nav a, nav a:hover { text-decoration:none; }
+					nav li { display:inline; padding:10px 15px; transition:0.3s; color:#fff; border-radius:17px; }
+					nav li:hover { background-color:#ddd; color:black; }
+		#jumbotrondiv { padding:125px 25px; text-align:center; color:#fff; }
+		#jumbotrondiv * { transition:0.5s; }
+			#jumbotronlogo { height:200px; margin-bottom:20px; }
+			#jumbotrondiv h1 { text-shadow:2px 2px 3px rgba(0,0,0,0.6); font-size:5em; font-weight:700; }
+			#jumbotrondiv h2 { text-shadow:2px 2px 3px rgba(0,0,0,0.6); font-size:24px; }
+			#divider { margin:50px auto; width:600px; }
+			#getstartedbutton { margin:30px 0; padding:10px 20px; border:1px solid #fff; color:#fff; background-color:rgba(255,255,255,0); font-size:20px; }
+			#showloginbutton { margin:30px 0; padding:10px 20px; border:1px solid #fff; color:#000; background-color:#fff; font-size:20px; }
+			#showloginbutton:hover, #getstartedbutton:hover { background-color:rgba(255,255,255,0.5); color:#000; }
+		section { padding:35px 25px; overflow:hidden; }
+			#about1div, #about2div, #about3div { clear:both; padding:50px 0; overflow:hidden; }
+				#aboutimgdiv1, #aboutimgdiv2, #aboutimgdiv3 { width:50%; height:200px; float:left; padding:20px 30px; text-align:left; overflow:hidden; }
+				#aboutimgdiv2 { text-align:right; }
+					#aboutimg1, #aboutimg2, #aboutimg3 { height:100%; }
+					#aboutimgdiv2-2 { display:none; }
+				#aboutcaption1, #aboutcaption2, #aboutcaption3 { width:50%; float:left; padding:20px; text-align:right; }
+				#aboutcaption2 { text-align:left; }
+					#abouth21, #abouth22, #abouth23 { margin-bottom:20px; }
+		footer { width:100%; padding:50px 25px 100px 25px; background-color:#0e0e0e; color:#fff; overflow:hidden; }
+			#footerdiv { width:100%; max-width: 1000px; margin:0 auto; overflow:auto; }
+				#footercontactusdiv, #footerfollowusdiv, #footeremailusdiv, #footerotherstuffsdiv { width:25%; padding:20px; float:left; }
+				#footerfollowusdiv .footerheader { padding-left:7px; }
+				.footerheader { padding:20px 0; font-family:'Arial Narrow'; font-weight:bold; font-size:20px; }
+					.contactlabel { font-weight:bold; font-size:15px; color:#777; }
+					.contactvalue { font-size:15px; margin-left:15px; color:#777; }
+					#footerfollowus { width:176px; display:block; overflow:auto; }
+						.followbutton { width:30px; height:30px; margin:7px; padding:7px; text-align:center; background-color:#eee; color:#0e0e0e; font-weight:bold; border-radius:15px; float:left; cursor:pointer; transition:0.5s; }
+						#footerfollowusfacebook:hover { background-color:#3b5998; position:relative; bottom:2px; }
+						#footerfollowustwitter:hover { background-color:#55acee; position:relative; bottom:2px; }
+						#footerfollowusinstagram:hover { background-color:#e95950; position:relative; bottom:2px; }
+						#footerfollowusdribbble:hover { background-color:#ea4c89; position:relative; bottom:2px; }
+						#footerfollowusgoogleplus:hover { background-color:#dd4b39; position:relative; bottom:2px; }
+						#footerfollowuslinkedin:hover { background-color:#007bb5; position:relative; bottom:2px; }
+						#footerfollowuspinterest:hover { background-color:#cb2027; position:relative; bottom:2px; }
+						#footerfollowustumblr:hover { background-color:#32506d; position:relative; bottom:2px; }
+					#footeremailusdiv p { font-size:15px; color:#777; }
+					#footeremailusinput { width:90%; height:70px; margin:10px 0; padding:5px; background-color:#0e0e0e; color:#777; font-family:Arial; border:2px solid #4e4e4e; resize:vertical; overflow:hidden; }
+					#footeremailussend { width:60px; text-align:center; padding:5px 0; background-color:#777; color:#000; font-size:15px; border-radius:2px; transition:0.2s; cursor:pointer; }
+						#footeremailussend:hover { background-color:#fff; }
+					#footerotherstuffsdiv p { font-size:15px; color:#777; }
+		/* Responsive CSS */
+		@media(max-width:1199px) {
+		    #jumbotrondiv { padding:180px 25px; }
+			#jumbotronlogo { height:150px; }
+		    header { width:680px; }
+		    #aboutimgdiv1, #aboutimgdiv2, #aboutimgdiv3 { height:175px; }
+			#footercontactusdiv, #footerfollowusdiv, #footeremailusdiv, #footerotherstuffsdiv { width:50%; text-align:center; }
+			#footerfollowus { margin:0 auto; }
+			#footeremailusinput { max-width:320px; }
+			#footeremailussend { margin:0 auto; } }
+		@media(max-width:767px) {
+		    #jumbotrondiv { padding:115px 25px; }
+			#jumbotronlogo { height:125px; }
+		    #jumbotrondiv h1 { font-size:4em; }
+		    #jumbotrondiv h2 { font-size:18px; }
+			#divider { margin:35px auto; width:425px; }
+			#showloginbutton, #getstartedbutton { font-size:13px; margin:15px 0; }
+			header { width:460px; } 
+			section { font-size:90%; }
+				#about1div, #about2div, #about3div { clear:both; padding:30px 0; }
+					#aboutimgdiv1, #aboutimgdiv2, #aboutimgdiv3 { height:125px; }
+						#abouth21, #abouth22, #abouth23 { margin-bottom:10px; }
+			#footercontactusdiv, #footerfollowusdiv, #footeremailusdiv, #footerotherstuffsdiv { width:100%; text-align:center; }
+			#footeremailusinput { max-width:320px; } }
+		@media(max-width:496px) {
+		    #jumbotrondiv { padding:105px 25px; }
+			#jumbotronlogo { height:100px; }
+		    #jumbotrondiv h1 { font-size:2em; }
+		    #jumbotrondiv h2 { font-size:15px; }
+			#divider { width:80%; margin:25px auto; }
+			#logodiv { display:none; }
+			#headerdiv { padding:0; }
+				header { width:300px; }
+				nav { text-align:center; float:inherit; position:static; margin:0 auto; padding:10px; }
+			section { font-size:85%; }
+				#about1div, #about2div, #about3div { clear:both; padding:10px 0; }
+					#aboutimgdiv1, #aboutimgdiv2, #aboutimgdiv3 { margin:0 auto; width:100%; height:auto; float:none; text-align:center; }
+						#aboutimg1, #aboutimg2, #aboutimg3 { width:80%; height:auto; }
+						#aboutimgdiv2-1 { display:none; }
+						#aboutimgdiv2-2 { display:inline; }
+					#aboutcaption1, #aboutcaption2, #aboutcaption3 { width:100%; text-align:center; }
+			#loginsignupmodal { width:80%; max-width:300px; margin:10% auto; }
+				#togglelogin, #togglesignup { font-size:13.33px; } }
+	</style>
+	<script>
+		var loginsignuppageYOffset = 0;
+		function $(a) { return document.getElementById(a); }
+		window.onscroll = testScroll
+		function testScroll(ev) {
+			if (window.pageYOffset == 0) $('headerdiv').style.position = 'absolute';
+			else $('headerdiv').style.position = 'fixed';
+			if (window.pageYOffset > 0)
+				$('headerdiv').style.backgroundColor = 'rgba(40,40,40,1)';
+			else
+				$('headerdiv').style.backgroundColor = 'rgba(0,0,0,0)';
+			if ($('loginsignupmodaldiv').style.display == 'inline')
+				window.scrollTo(0,loginsignuppageYOffset);
+			lastpageYOffset = window.pageYOffset;
+		}
+		function openloginsignupmodaldiv() {
+			loginsignuppageYOffset = window.pageYOffset;
+			$('loginsignupmodaldiv').style.marginTop = window.pageYOffset+'px';
+			$('loginsignupmodaldiv').style.display = 'inline';
+			$('loginsignupmodal').style.opacity = '0';
+			setTimeout(function() { $('loginsignupmodal').style.opacity = '1'; }, 0); }
+		function closeloginsignupmodaldiv() { $('loginsignupmodaldiv').style.display = 'none'; }
+		function togglelogin() {
+			$('loginformdiv').style.display = 'inline';
+			$('signupformdiv').style.display = 'none';
+			$('togglelogin').style.backgroundColor = '#fff';
+			$('togglelogin').style.color = '#002d3c';
+			$('togglesignup').style.backgroundColor = '#e7e7e7';
+			$('togglesignup').style.color = '#5e818c'; }
+		function togglesignup() {
+			$('signupformdiv').style.display = 'inline';
+			$('loginformdiv').style.display = 'none';
+			$('togglesignup').style.backgroundColor = '#fff';
+			$('togglesignup').style.color = '#002d3c';
+			$('togglelogin').style.backgroundColor = '#e7e7e7';
+			$('togglelogin').style.color = '#5e818c'; }
+	</script>
+</head>
+<body>
+	<div id='loginsignupmodaldiv'>
+		<div id='loginsignupmodal'>
+			<button onclick='togglelogin()' id='togglelogin'>LOG IN</button><button onclick='togglesignup()' id='togglesignup'>SIGN UP</button>
+	        <div id='loginformdiv'>
+				<form id='loginform'>
+			        <p><input id='liusername' type='text' placeholder='Username' name='liusername'/></p>
+			        <p><input id='lipassword' type='password' placeholder='Password' name='lipassword'/></p>
+			        <input type='submit' id='lisubmit' onclick='location.href="userinterface.html";' value='SUBMIT'/>
+			        <input type='button' class='cancel' onclick='closeloginsignupmodaldiv()' value='CANCEL'/>
+		        </form>
+			</div>
+	        <div id='signupformdiv'>
+		        <form id='signupform' onsubmit='location.href="userinterface.html";'>
+			        <p><input id='suusername' type='text' placeholder='Username' name='suusername'/></p>
+			        <p><input id='supassword' type='password' placeholder='Password' name='supassword'/></p>
+			        <p><input id='suconfirmpassword' type='password' placeholder='Confirm Password' name='suconfirmpassword'/></p>
+			        <input type='submit' id='susubmit' onclick='location.href="userinterface.html";' value='SUBMIT'/>
+			        <input type='button' class='cancel' onclick='closeloginsignupmodaldiv()' value='CANCEL'/>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div id='headerdivdiv'>
+		<div id='headerdiv'>
+			<header>
+				<div id='logodiv'>
+					<img id='logo' src='images/kms_logo.png'/><h2 id='logodivh1'>Knowledge360</h2>
+				</div>
+				<nav>
+					<ul>
+						<a onclick='openloginsignupmodaldiv(); togglesignup();'><li>Sign Up</li></a>
+						<a href='#section' onclick='scroll(this.innerHTML)'><li>About</li></a>
+						<a href='#footer' onclick='scroll(this.innerHTML)'><li>Contact</li></a>
+					</ul>
+				</nav>
+			</header>
+		</div>
+		<div id='jumbotrondiv'>
+			<img id='jumbotronlogo' src='images/kms_logo.png'/>
+            <h1>Knowledge360</h1>
+            <h2>Innovate your Knowledge Management Process</h2>
+            <hr id="divider">
+            <a href='#section' id='getstartedbutton'>Get Started</a><a onclick='openloginsignupmodaldiv(); togglelogin();' id='showloginbutton'>Log In</a>
+        </div>
+	</div>
+	<section id='section'>
+		<div id='about1div'>
+			<div id='aboutcaption1'>
+				<h2 id='abouth21'>Share and retrieve resources from within your company.</h2>
+				<p id='aboutp1'>Upload your intels and share it to other employees. You can also make comments and reactions to other people who share their resources. Also, you can obtain documents from other departments easily.</p>
+			</div>
+			<div id='aboutimgdiv1'>
+				<img id='aboutimg1' src='images/image_spotlight.png'/>
+			</div>
+		</div>
+		<div id='about2div'>
+			<div id='aboutimgdiv2-1'>
+				<div id='aboutimgdiv2'>
+					<img id='aboutimg2' src='images/image_classroom.png'/>
+				</div>
+			</div>
+			<div id='aboutcaption2'>
+				<h2 id='abouth22'>Collaborate in your workplace.</h2>
+				<p id='aboutp2'>Participate in conversations and quickly share up-to-date documents anywhere, anytime on any devices to create  thriving digital workplace, resulting in a more collaborative and engaged work force.</p>
+			</div>
+			<div id='aboutimgdiv2-2'>
+				<div id='aboutimgdiv2'>
+					<img id='aboutimg2' src='images/image_classroom.png'/>
+				</div>
+			</div>
+		</div>
+		<div id='about3div'>
+			<div id='aboutcaption1'>
+				<h2 id='abouth23'>Get frequent updates about the company.</h2>
+				<p id='aboutp3'>Engage with the company updates like company news, promotions, sales progress, relevant industry articles and activities done in the company.</p>
+			</div>
+			<div id='aboutimgdiv3'>
+				<img id='aboutimg3' src='images/image_parents.png'/>
+			</div>
+		</div>
+	</section>
+	<footer id='footer'>
+		<div id='footerdiv'>
+			<div id='footercontactusdiv'>
+				<div class='footerheader'>Contact Us</div>
+				<p id='contactuscall'><span class='contactlabel'>Phone</span><span class='contactvalue'>+63 2 134 2323</span></p>
+				<p id='contactuscall'><span class='contactlabel'>Email</span><span class='contactvalue'>info@knowledge360.com</span></p>
+				<p id='contactuscall'><span class='contactlabel'>Skype</span><span class='contactvalue'>knowledge360</span></p>
+			</div>
+			<div id='footerfollowusdiv'>
+				<div class='footerheader'>Follow Us</div>
+				<div id='footerfollowus'>
+					<a href='http://www.facebook.com' target='_blank'><p id='footerfollowusfacebook' class='icon followbutton'>&#xf09a;</p></a>
+					<a href='http://www.twitter.com' target='_blank'><p id='footerfollowustwitter' class='icon followbutton'>&#xf099;</p></a>
+					<a href='http://www.instagram.com' target='_blank'><p id='footerfollowusinstagram' class='icon followbutton'>&#xf16d;</p></a>
+					<a href='http://www.dribbble.com' target='_blank'><p id='footerfollowusdribbble' class='icon followbutton'>&#xf17d;</p></a>
+				</div>
+				<div id='footerfollowus'>
+					<a href='http://www.plus.google.com' target='_blank'><p id='footerfollowusgoogleplus' class='icon followbutton'>&#xf0d5;</p></a>
+					<a href='http://www.linkedin.com' target='_blank'><p id='footerfollowuslinkedin' class='icon followbutton'>&#xf0e1;</p></a>
+					<a href='https://www.pinterest.com' target='_blank'><p id='footerfollowuspinterest' class='icon followbutton'>&#xf231;</p></a>
+					<a href='http://www.tumblr.com' target='_blank'><p id='footerfollowustumblr' class='icon followbutton'>&#xf173;</p></a>
+				</div>
+			</div>
+			<div id='footeremailusdiv'>
+				<div class='footerheader'>The Developer</div>
+				<p>Have any comments and suggestions? Send us an email.</p>
+				<textarea id='footeremailusinput' placeholder='Type your message here.'></textarea>
+				<a href='mailto:reynellbobihis@yahoo.com?Subject=Comments' target='_blank'><div id='footeremailussend'>SEND</div></a>
+			</div>
+			<div id='footerotherstuffsdiv'>
+				<div class='footerheader'>Other Stuffs</div>
+				<p>Copyright &copy 2016 WebDev Polytechnic University of the Philippines. All rights reserved.</p>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>

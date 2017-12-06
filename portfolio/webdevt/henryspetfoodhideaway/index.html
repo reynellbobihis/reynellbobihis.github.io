@@ -1,0 +1,185 @@
+<!--©ReynellBobihis-->
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Henry's Petfood Hideaway</title>
+<style>
+	body { margin:0px; font-family:Arial; background-color:#ddd; }
+	p { margin:7px 0; }
+	h1 { margin:0px; font-weight:normal; padding:150px 0 180px 0; color:white; font-size:250%; text-align:center; background-color:#022; }
+	form { background-color:white; max-width:520px; margin:0 auto; padding:40px 80px; border-radius:10px; box-shadow:0 0 70px 1px rgba(0, 0, 0, 0.5); position:relative; bottom:100px; }
+	h2 { margin:40px 0px; }
+	h3 { margin:30px 0px; }
+	th, td { transition:0.2s; border:1px solid #ddd; text-align:center; padding:3px 12px; }
+	th { padding:6px 12px; background-color:#eee; }
+	th:hover { background-color:#000; color:white; }
+	td:hover { background-color:#ddd; }
+	table { border-collapse:collapse; }
+	.right { text-align:right; }
+	.center { text-align:center; }
+	.submitPart { margin-top:50px }
+	*:focus { outline:none; }
+	input[type=checkbox] { background-color:white; }
+	input[type=text], input[type=number], input[type=email], input[type=tel] { transition:0.2s; font-size:14px; padding:0 3px; border:none; border-bottom:2px solid #ddd; }
+	input[type=text]:hover, input[type=number]:hover, input[type=email]:hover, input[type=tel]:hover { border-bottom:2px solid #888; }
+	input[type=text]:focus, input[type=number]:focus, input[type=email]:focus, input[type=tel]:focus { border-bottom:2px solid black; }
+	input[type=tel] { width:135px; }
+	input[type=submit] { cursor:pointer; color:#000; background-color:#eee; transition:0.3s; border:none; padding:7px 17px; border-radius:3px; }
+	input[type=reset] { cursor:pointer; color:#000; background-color:white; transition:0.3s; border:none; padding:7px 17px; border-radius:3px; }
+	input[type=submit]:hover { color:white; background-color:black; }
+	select { border:none; background-color:rgba(0, 0, 0, 0); text-align-last:right; }
+	#backtotop { cursor:pointer; position:fixed; right:70px; bottom:20px; background-color:#ddd; border:none; border-radius:3px; color:black; width:60px; height:30px; }
+	#backtotop:hover { background-color:black; opacity:1; transition:0.3s; color:white; }
+</style>
+<script>
+function $(a) { return document.getElementById(a); }
+function sameAsSA() {
+	if ($('checkBox1').checked) {
+		$('name2').value = document.getElementById('name1').value;
+		$('address2').value = $('address1').value;
+		$('city2').value = $('city1').value;
+		$('state2').value = $('state1').value;
+		$('zipcode2').value = $('zipcode1').value;
+		$('tel2').value = $('tel1').value;
+		$('email2').value = $('email1').value;
+	}
+	else {
+		$('name2').value = '';
+		$('address2').value = '';
+		$('city2').value = '';
+		$('state2').value = '';
+		$('zipcode2').value = '';
+		$('tel2').value = '';
+		$('email2').value = '';	
+	}
+}
+</script>
+</head>
+<body>
+<h1 id='h1'>Henry's Petfood Hideaway</h1>
+<form id='form' action='actionpage.html' method='post'>
+	<h2>Order Form</h2>
+	<h3>Shipping Address</h3>
+	<p>Name: <input type='text' value='' id='name1' size='35' maxlength='50'/></p>
+	<p>Address: <input type='text' value='' id='address1' size='45' maxlength='50'/></p>
+	<p>City: <input type='text' value='' id='city1' size='15' maxlength='25'/> &nbsp&nbsp State:
+		<select id='state1'>
+			<option style='display:none; visibility:hidden;' disabled selected value=''>Choose state</option>
+			<option value='Argentina'>Argentina</option>
+			<option value='Germany'>Germany</option>
+			<option value='Philippines'>Philippines</option>
+			<option value='Scotland'>Scotland</option>
+		</select> &nbsp&nbsp Zip Code: <input type='text' id='zipcode1' pattern='[0-9]' size='4' maxlength='4'/>
+	</p>
+	<p>Telephone: <input type='tel' id='tel1' value=''/> &nbsp&nbsp Email: <input type='email' id='email1' value='' size='25' maxlength='50'/></p>
+	<h3>Billing Address</h3>
+	<p>Same as Shipping Address <input type='checkbox' id='checkBox1' onclick='sameAsSA()' value=''/>
+	<p>Name: <input type='text' value='' id='name2' size='35' maxlength='50'/></p>
+	<p>Address: <input type='text' value='' id='address2' size='45' maxlength='50'/></p>
+	<p>City: <input type='text' value='' id='city2' size='15' maxlength='25'/> &nbsp&nbsp State:
+		<select id='state2' >
+			<option style='display:none; visibility:hidden;' disabled selected value=''>Choose state</option>
+			<option value='Argentina'>Argentina</option>
+			<option value='Germany'>Germany</option>
+			<option value='Philippines'>Philippines</option>
+			<option value='Scotland'>Scotland</option>
+		</select> &nbsp&nbsp Zip Code: <input type='text' id='zipcode2' pattern='[0-9]' size='4' maxlength='4'/>
+	</p>
+	<p>Telephone: <input type='tel' id='tel2' value=''/> &nbsp&nbsp Email: <input type='email' id='email2' value='' size='25' maxlength='50'/></p>
+	<h2>Products to Order</h2>
+	<table align='center'>
+	<tr>
+	  <th>Item</th>
+	  <th>Quantity</th>
+	  <th>Repeat Order</th>
+	  <th>Price</th>
+	  <th>Est. Cost</th>
+	</tr>
+	<tr>
+	  <td>Puppy Chow</td>
+	  <td>
+		<select>
+		  <option style='display:none; visibility:hidden;' disabled selected value=''>Choose Qty.</option>
+		  <option value='1'>1</option>
+		  <option value='2'>2</option>
+		  <option value='3'>3</option>
+		  <option value='4'>4</option>
+		  <option value='5'>5</option>
+		</select>
+	  </td>
+	  <td>
+		<input type='checkbox'/>
+	  </td>
+	  <td>$1.50</td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td>Dog Food</td>
+	  <td>
+		<select>
+		  <option style='display:none; visibility:hidden;' disabled selected value=''>Choose Qty.</option>
+		  <option value='1'>1</option>
+		  <option value='2'>2</option>
+		  <option value='3'>3</option>
+		  <option value='4'>4</option>
+		  <option value='5'>5</option>
+		</select>
+	  </td>
+	  <td><input type='checkbox'/></td>
+	  <td>$0.25</td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td>Treats</td>
+	  <td>
+		<select>
+		  <option style='display:none; visibility:hidden;' disabled selected value=''>Choose Qty.</option>
+		  <option value='1'>1</option>
+		  <option value='2'>2</option>
+		  <option value='3'>3</option>
+		  <option value='4'>4</option>
+		  <option value='5'>5</option>
+		</select>
+	  </td>
+	  <td><input type='checkbox'/></td>
+	  <td>$0.30</td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td>More Treats</td>
+	  <td>Yes&nbsp<input type='checkbox'/></td>
+	  <td></td>
+	  <td>$0.30</td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td class='right' colspan='4'>6.25% Sales Tax:</td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td class='right' colspan='4'>Shiping Method:
+		<select>
+		  <option style='display:none; visibility:hidden;' disabled selected value=''>Choose a shipping method</option>
+		  <option value='2GO'>2GO</option>
+		  <option value='DHL'>DHL</option>
+		  <option value='FedEx'>FedEx</option>
+		  <option value='LBC'>LBC</option>
+		</select>
+	  </td>
+	  <td></td>
+	</tr>
+	<tr>
+	  <td class='right' colspan='4'>Total:</td>
+	  <td></td>
+	</tr>
+	</table>
+	<p class='center'>Total Sale: &nbsp &nbsp &nbsp &nbsp </p>
+	<p class='right submitPart'>
+	  <input type='reset' value='Start Over'/>
+	  <input type='submit' value='Submit'/>
+	</p>
+</form>
+<a href='#h1'><button id='backtotop'> Top</button></a>
+</body>
+</html>
