@@ -1,0 +1,13 @@
+enabled: true
+from: bobihisreynell@gmail.com
+to: reynellbobihis@gmail.com
+mailer:
+  engine: smtp
+  smtp:
+    server: smtp.gmail.com
+    port: 465
+    encryption: ssl
+    user: bobihisreynell@gmail.com
+    password: scrjcgfqzbbgeswi
+  sendmail:
+    bin: '/usr/sbin/sendmail'
