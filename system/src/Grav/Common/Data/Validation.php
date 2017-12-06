@@ -1,84 +1,64 @@
 <?php
-/**
- * @package    Grav.Common.Data
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Data;
-
-use Grav\Common\Grav;
-use Grav\Common\Utils;
+use Grav\Common\GravTrait;
 use Symfony\Component\Yaml\Exception\ParseException;
 use Symfony\Component\Yaml\Parser;
-use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Data validation.
+ *
+ * @author RocketTheme
+ * @license MIT
+ */
 class Validation
 {
+    use GravTrait;
+
     /**
      * Validate value against a blueprint field definition.
      *
-     * @param $value
+     * @param mixed $value
      * @param array $field
-     * @return array
+     * @throws \RuntimeException
      */
     public static function validate($value, array $field)
     {
-        $messages = [];
-
-        $validate = isset($field['validate']) ? (array) $field['validate'] : [];
+        $validate = isset($field['validate']) ? (array) $field['validate'] : array();
 
         // If value isn't required, we will stop validation if empty value is given.
         if (empty($validate['required']) && ($value === null || $value === '')) {
-            return $messages;
+            return;
         }
 
-        if (!isset($field['type'])) {
-            $field['type'] = 'text';
-        }
-
-        // If this is a YAML field, stop validation
-        if (isset($field['yaml']) && $field['yaml'] === true) {
-            return $messages;
-        }
-
-        // Get language class.
-        $language = Grav::instance()['language'];
+        // Get language class
+        $language = self::getGrav()['language'];
 
         // Validate type with fallback type text.
         $type = (string) isset($field['validate']['type']) ? $field['validate']['type'] : $field['type'];
         $method = 'type'.strtr($type, '-', '_');
-
         $name = ucfirst(isset($field['label']) ? $field['label'] : $field['name']);
-        $message = (string) isset($field['validate']['message'])
-            ? $language->translate($field['validate']['message'])
-            : $language->translate('FORM.INVALID_INPUT', null, true) . ' "' . $language->translate($name) . '"';
+        $message = (string) isset($field['validate']['message']) ? $field['validate']['message'] : 'Invalid input in "' . $language->translate($name) . '""';
 
         if (method_exists(__CLASS__, $method)) {
             $success = self::$method($value, $validate, $field);
         } else {
-            $success = true;
+            $success = self::typeText($value, $validate, $field);
         }
-
         if (!$success) {
-            $messages[$field['name']][] = $message;
+            throw new \RuntimeException($message);
         }
 
-        // Check individual rules.
+        // Check individual rules
         foreach ($validate as $rule => $params) {
-            $method = 'validate' . ucfirst(strtr($rule, '-', '_'));
-
+            $method = 'validate'.strtr($rule, '-', '_');
             if (method_exists(__CLASS__, $method)) {
                 $success = self::$method($value, $params);
 
                 if (!$success) {
-                    $messages[$field['name']][] = $message;
+                    throw new \RuntimeException($message);
                 }
             }
         }
-
-        return $messages;
     }
 
     /**
@@ -90,31 +70,33 @@ class Validation
      */
     public static function filter($value, array $field)
     {
-        $validate = isset($field['validate']) ? (array) $field['validate'] : [];
+        $validate = isset($field['validate']) ? (array) $field['validate'] : array();
 
         // If value isn't required, we will return null if empty value is given.
         if (empty($validate['required']) && ($value === null || $value === '')) {
             return null;
         }
 
-        if (!isset($field['type'])) {
-            $field['type'] = 'text';
-        }
-
-        // If this is a YAML field, simply parse it and return the value.
+        // if this is a YAML field, simply parse it and return the value
         if (isset($field['yaml']) && $field['yaml'] === true) {
-            return $value;
+            try {
+                $yaml = new Parser();
+                return $yaml->parse($value);
+            } catch (ParseException $e) {
+                throw new \RuntimeException($e->getMessage());
+            }
         }
 
         // Validate type with fallback type text.
         $type = (string) isset($field['validate']['type']) ? $field['validate']['type'] : $field['type'];
-        $method = 'filter' . ucfirst(strtr($type, '-', '_'));
-
-        if (!method_exists(__CLASS__, $method)) {
-            $method = 'filterText';
+        $method = 'filter'.strtr($type, '-', '_');
+        if (method_exists(__CLASS__, $method)) {
+            $value = self::$method($value, $validate, $field);
+        } else {
+            $value = self::filterText($value, $validate, $field);
         }
 
-        return self::$method($value, $validate, $field);
+        return $value;
     }
 
     /**
@@ -165,17 +147,6 @@ class Validation
     {
         return is_array($value) ? true : self::typeText($value, $params, $field);
     }
-
-    protected static function filterLower($value, array $params)
-    {
-        return strtolower($value);
-    }
-
-    protected static function filterUpper($value, array $params)
-    {
-        return strtoupper($value);
-    }
-
 
     /**
      * HTML5 input: textarea
@@ -287,24 +258,6 @@ class Validation
     }
 
     /**
-     * Custom input: file
-     *
-     * @param  mixed  $value   Value to be validated.
-     * @param  array  $params  Validation parameters.
-     * @param  array  $field   Blueprint for the field.
-     * @return bool   True if validation succeeded.
-     */
-    public static function typeFile($value, array $params, array $field)
-    {
-        return self::typeArray((array) $value, $params, $field);
-    }
-
-    protected static function filterFile($value, array $params, array $field)
-    {
-        return (array) $value;
-    }
-
-    /**
      * HTML5 input: select
      *
      * @param  mixed  $value   Value to be validated.
@@ -325,6 +278,7 @@ class Validation
      * @param  array  $field   Blueprint for the field.
      * @return bool   True if validation succeeded.
      */
+
     public static function typeNumber($value, array $params, array $field)
     {
         if (!is_numeric($value)) {
@@ -349,12 +303,12 @@ class Validation
 
     protected static function filterNumber($value, array $params, array $field)
     {
-        return (string)(int)$value !== (string)(float)$value ? (float) $value : (int) $value;
+        return (int) $value;
     }
 
     protected static function filterDateTime($value, array $params, array $field)
     {
-        $format = Grav::instance()['config']->get('system.pages.dateformat.default');
+        $format = self::getGrav()['config']->get('system.pages.dateformat.default');
         if ($format) {
             $converted = new \DateTime($value);
             return $converted->format($format);
@@ -404,15 +358,7 @@ class Validation
      */
     public static function typeEmail($value, array $params, array $field)
     {
-        $values = !is_array($value) ? explode(',', preg_replace('/\s+/', '', $value)) : $value;
-
-        foreach ($values as $value) {
-            if (!(self::typeText($value, $params, $field) && filter_var($value, FILTER_VALIDATE_EMAIL))) {
-                return false;
-            }
-        }
-
-        return true;
+        return self::typeText($value, $params, $field) && filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
     /**
@@ -576,11 +522,6 @@ class Validation
         $options = isset($field['options']) ? array_keys($field['options']) : array();
         $multi = isset($field['multiple']) ? $field['multiple'] : false;
 
-        if (count($values) == 1 && isset($values[0]) && $values[0] == '') {
-            return null;
-        }
-
-
         if ($options) {
             $useKey = isset($field['use']) && $field['use'] == 'keys';
             foreach ($values as $key => $value) {
@@ -592,22 +533,9 @@ class Validation
             foreach ($values as $key => $value) {
                 if (is_array($value)) {
                     $value = implode(',', $value);
-                    $values[$key] =  array_map('trim', explode(',', $value));
-                } else {
-                    $values[$key] =  trim($value);
-                }
-            }
-        }
-
-        if (isset($field['ignore_empty']) && Utils::isPositive($field['ignore_empty'])) {
-            foreach ($values as $key => $value) {
-                foreach ($value as $inner_key => $inner_value) {
-                    if ($inner_value == '') {
-                        unset($value[$inner_key]);
-                    }
                 }
 
-                $values[$key] = $value;
+                $values[$key] =  array_map('trim', explode(',', $value));
             }
         }
 
@@ -638,25 +566,6 @@ class Validation
         return (array) $value;
     }
 
-    public static function typeYaml($value, $params)
-    {
-        try {
-            Yaml::parse($value);
-            return true;
-        } catch (ParseException $e) {
-            return false;
-        }
-    }
-
-    public static function filterYaml($value, $params)
-    {
-        try {
-            return (array) Yaml::parse($value);
-        } catch (ParseException $e) {
-            return null;
-        }
-    }
-
     /**
      * Custom input: ignore (will not validate)
      *
@@ -675,16 +584,15 @@ class Validation
         return $value;
     }
 
-
     // HTML5 attributes (min, max and range are handled inside the types)
 
     public static function validateRequired($value, $params)
     {
-        if (is_scalar($value)) {
-            return (bool) $params !== true || $value !== '';
-        } else {
-            return (bool) $params !== true || !empty($value);
+        if (is_string($value)) {
+            $value = trim($value);
         }
+        
+        return (bool) $params !== true || !empty($value);
     }
 
     public static function validatePattern($value, $params)
@@ -752,14 +660,13 @@ class Validation
 
     public static function validateArray($value, $params)
     {
-        return is_array($value)
-        || ($value instanceof \ArrayAccess
+        return is_array($value) || ($value instanceof \ArrayAccess
             && $value instanceof \Traversable
             && $value instanceof \Countable);
     }
 
     public static function validateJson($value, $params)
     {
-        return (bool) (@json_decode($value));
+        return (bool) (json_decode($value));
     }
 }

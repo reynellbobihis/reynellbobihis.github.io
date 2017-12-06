@@ -12,8 +12,6 @@ namespace RocketTheme\Toolbox\ArrayTraits;
  */
 trait NestedArrayAccess
 {
-    protected $nestedSeparator = '.';
-
     /**
      * Get value by using dot notation for nested arrays/objects.
      *
@@ -24,9 +22,9 @@ trait NestedArrayAccess
      * @param string  $separator  Separator, defaults to '.'
      * @return mixed  Value.
      */
-    public function get($name, $default = null, $separator = null)
+    public function get($name, $default = null, $separator = '.')
     {
-        $path = explode($separator ?: $this->nestedSeparator, $name);
+        $path = explode($separator, $name);
         $current = $this->items;
         foreach ($path as $field) {
             if (is_object($current) && isset($current->{$field})) {
@@ -51,9 +49,9 @@ trait NestedArrayAccess
      * @param string  $separator  Separator, defaults to '.'
      * @return $this
      */
-    public function set($name, $value, $separator = null)
+    public function set($name, $value, $separator = '.')
     {
-        $path = explode($separator ?: $this->nestedSeparator, $name);
+        $path = explode($separator, $name);
         $current = &$this->items;
         foreach ($path as $field) {
             if (is_object($current)) {
@@ -81,13 +79,13 @@ trait NestedArrayAccess
     /**
      * Unset value by using dot notation for nested arrays/objects.
      *
-     * @example $data->undef('this.is.my.nested.variable');
+     * @example $data->remove('this.is.my.nested.variable');
      *
      * @param string  $name       Dot separated path to the requested value.
      * @param string  $separator  Separator, defaults to '.'
      * @return $this
      */
-    public function undef($name, $separator = null)
+    public function remove($name, $separator = '.')
     {
         if ($name === '') {
             $this->items = [];
@@ -95,7 +93,7 @@ trait NestedArrayAccess
             return $this;
         }
 
-        $path = explode($separator ?: $this->nestedSeparator, $name);
+        $path = explode($separator, $name);
         $var = array_pop($path);
         $current = &$this->items;
 
@@ -130,7 +128,7 @@ trait NestedArrayAccess
      * @param string  $separator  Separator, defaults to '.'
      * @return $this
      */
-    public function def($name, $default = null, $separator = null)
+    public function def($name, $default = null, $separator = '.')
     {
         $this->set($name, $this->get($name, $default, $separator), $separator);
 
@@ -184,7 +182,7 @@ trait NestedArrayAccess
         if (is_null($offset)) {
             $this->items[] = [];
         } else {
-            $this->undef($offset);
+            $this->remove($offset);
         }
     }
 }

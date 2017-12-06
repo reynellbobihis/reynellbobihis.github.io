@@ -293,11 +293,7 @@ class File implements FileInterface
 
         } elseif ($this->content === null) {
             // Decode RAW file.
-            try {
-                $this->content = $this->decode($this->raw());
-            } catch (\Exception $e) {
-                throw new \RuntimeException(sprintf('Failed to read %s: %s', $this->filename, $e->getMessage()), 500, $e);
-            }
+            $this->content = $this->decode($this->raw());
         }
 
         return $this->content;
@@ -335,26 +331,6 @@ class File implements FileInterface
 
         // Touch the directory as well, thus marking it modified.
         @touch(dirname($this->filename));
-    }
-
-    /**
-     * Rename file in the filesystem if it exists.
-     *
-     * @param $filename
-     * @return bool
-     */
-    public function rename($filename)
-    {
-        if ($this->exists() && !@rename($this->filename, $filename)) {
-            return false;
-        }
-
-        unset(static::$instances[$this->filename]);
-        static::$instances[$filename] = $this;
-
-        $this->filename = $filename;
-
-        return true;
     }
 
     /**

@@ -1,11 +1,4 @@
 <?php
-/**
- * @package    Grav.Common.Page
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Page\Medium;
 
 class ThumbnailImageMedium extends ImageMedium
@@ -34,16 +27,15 @@ class ThumbnailImageMedium extends ImageMedium
     /**
      * Get an element (is array) that can be rendered by the Parsedown engine
      *
-     * @param  string $title
-     * @param  string $alt
-     * @param  string $class
-     * @param  string $id
+     * @param  string  $title
+     * @param  string  $alt
+     * @param  string  $class
      * @param  boolean $reset
      * @return array
      */
-    public function parsedownElement($title = null, $alt = null, $class = null, $id = null, $reset = true)
+    public function parsedownElement($title = null, $alt = null, $class = null, $reset = true)
     {
-        return $this->bubble('parsedownElement', [$title, $alt, $class, $id, $reset]);
+        return $this->bubble('parsedownElement', [$title, $alt, $class, $reset]);
     }
 
     /**
@@ -52,13 +44,12 @@ class ThumbnailImageMedium extends ImageMedium
      * @param string $title
      * @param string $alt
      * @param string $class
-     * @param string $id
      * @param bool $reset
      * @return string
      */
-    public function html($title = null, $alt = null, $class = null, $id = null, $reset = true)
+    public function html($title = null, $alt = null, $class = null, $reset = true)
     {
-        return $this->bubble('html', [$title, $alt, $class, $id, $reset]);
+        return $this->bubble('html', [$title, $alt, $class, $reset]);
     }
 
     /**

@@ -1,15 +1,8 @@
 <?php
-/**
- * @package    Grav.Common.GPM
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\GPM;
 
 use Grav\Common\Filesystem\Folder;
-use Grav\Common\Grav;
+use Symfony\Component\Yaml\Yaml;
 
 class Installer
 {
@@ -29,8 +22,6 @@ class Installer
     const ZIP_OPEN_ERROR = 32;
     /** @const Error while trying to extract the ZIP package */
     const ZIP_EXTRACT_ERROR = 64;
-    /** @const Invalid source file */
-    const INVALID_SOURCE = 128;
 
     /**
      * Destination folder on which validation checks are applied
@@ -39,14 +30,10 @@ class Installer
     protected static $target;
 
     /**
-     * @var integer Error Code
+     * Error Code
+     * @var integer
      */
     protected static $error = 0;
-
-    /**
-     * @var string Post install message
-     */
-    protected static $message = '';
 
     /**
      * Default options for the install
@@ -56,100 +43,77 @@ class Installer
         'overwrite'       => true,
         'ignore_symlinks' => true,
         'sophisticated'   => false,
-        'theme'           => false,
+        'theme'            => false,
         'install_path'    => '',
-        'ignores'         => [],
         'exclude_checks'  => [self::EXISTS, self::NOT_FOUND, self::IS_LINK]
     ];
 
     /**
      * Installs a given package to a given destination.
      *
-     * @param  string $zip the local path to ZIP package
+     * @param  string $package     The local path to the ZIP package
      * @param  string $destination The local path to the Grav Instance
-     * @param  array $options Options to use for installing. ie, ['install_path' => 'user/themes/antimatter']
-     * @param  string $extracted The local path to the extacted ZIP package
-     * @return bool True if everything went fine, False otherwise.
+     * @param  array  $options     Options to use for installing. ie, ['install_path' => 'user/themes/antimatter']
+     *
+     * @return boolean True if everything went fine, False otherwise.
      */
-    public static function install($zip, $destination, $options = [], $extracted = null)
+    public static function install($package, $destination, $options = [])
     {
         $destination = rtrim($destination, DS);
         $options = array_merge(self::$options, $options);
         $install_path = rtrim($destination . DS . ltrim($options['install_path'], DS), DS);
 
-        if (!self::isGravInstance($destination) || !self::isValidDestination($install_path,
-                $options['exclude_checks'])
-        ) {
+        if (!self::isGravInstance($destination) || !self::isValidDestination($install_path, $options['exclude_checks'])) {
             return false;
         }
 
         if (self::lastErrorCode() == self::IS_LINK && $options['ignore_symlinks'] ||
-            self::lastErrorCode() == self::EXISTS && !$options['overwrite']
-        ) {
+            self::lastErrorCode() == self::EXISTS && !$options['overwrite']) {
             return false;
         }
 
-        // Create a tmp location
-        $tmp_dir = Grav::instance()['locator']->findResource('tmp://', true, true);
-        $tmp = $tmp_dir . '/Grav-' . uniqid();
+        // Pre install checks
+        static::flightProcessing('pre_install', $install_path);
 
-        if (!$extracted) {
-            $extracted = self::unZip($zip, $tmp);
-            if (!$extracted) {
-                Folder::delete($tmp);
-                return false;
-            }
-        }
+        $zip = new \ZipArchive();
+        $archive = $zip->open($package);
+        $tmp = CACHE_DIR . 'tmp/Grav-' . uniqid();
 
-        if (!file_exists($extracted)) {
-            self::$error = self::INVALID_SOURCE;
+        if ($archive !== true) {
+            self::$error = self::ZIP_OPEN_ERROR;
+
             return false;
         }
 
+        Folder::mkdir($tmp);
 
-        $is_install = true;
-        $installer = self::loadInstaller($extracted, $is_install);
+        $unzip = $zip->extractTo($tmp);
 
-        if (isset($options['is_update']) && $options['is_update'] === true) {
-            $method = 'preUpdate';
-        } else {
-            $method = 'preInstall';
+        if (!$unzip) {
+            self::$error = self::ZIP_EXTRACT_ERROR;
+
+            $zip->close();
+            Folder::delete($tmp);
+
+            return false;
         }
 
-        if ($installer && method_exists($installer, $method)) {
-            $method_result = $installer::$method();
-            if ($method_result !== true) {
-                self::$error = 'An error occurred';
-                if (is_string($method_result)) {
-                    self::$error = $method_result;
-                }
-
-                return false;
-            }
-        }
 
         if (!$options['sophisticated']) {
             if ($options['theme']) {
-                self::copyInstall($extracted, $install_path);
+                self::copyInstall($zip, $install_path, $tmp);
             } else {
-                self::moveInstall($extracted, $install_path);
+                self::moveInstall($zip, $install_path, $tmp);
             }
         } else {
-            self::sophisticatedInstall($extracted, $install_path, $options['ignores']);
+            self::sophisticatedInstall($zip, $install_path, $tmp);
         }
 
         Folder::delete($tmp);
+        $zip->close();
 
-        if (isset($options['is_update']) && $options['is_update'] === true) {
-            $method = 'postUpdate';
-        } else {
-            $method = 'postInstall';
-        }
-
-        self::$message = '';
-        if ($installer && method_exists($installer, $method)) {
-            self::$message = $installer::$method();
-        }
+        // Post install checks
+        static::flightProcessing('post_install', $install_path);
 
         self::$error = self::OK;
 
@@ -157,152 +121,79 @@ class Installer
 
     }
 
-    /**
-     * Unzip a file to somewhere
-     *
-     * @param $zip_file
-     * @param $destination
-     * @return bool|string
-     */
-    public static function unZip($zip_file, $destination)
+    protected static function flightProcessing($state, $install_path)
     {
-        $zip = new \ZipArchive();
-        $archive = $zip->open($zip_file);
+        $blueprints_path = $install_path . DS . 'blueprints.yaml';
 
-        if ($archive === true) {
-            Folder::mkdir($destination);
-
-            $unzip = $zip->extractTo($destination);
-
-
-            if (!$unzip) {
-                self::$error = self::ZIP_EXTRACT_ERROR;
-                Folder::delete($destination);
-                $zip->close();
-                return false;
+        if (file_exists($blueprints_path)) {
+            $package_yaml = Yaml::parse(file_get_contents($blueprints_path));
+            if (isset($package_yaml['install'][$state]['create'])) {
+                foreach ((array) $package_yaml['install']['pre_install']['create'] as $file) {
+                    Folder::mkdir($install_path . '/' . ltrim($file, '/'));
+                }
             }
-
-            $package_folder_name = preg_replace('#\./$#', '', $zip->getNameIndex(0));
-            $zip->close();
-            $extracted_folder = $destination . '/' . $package_folder_name;
-
-            return $extracted_folder;
+            if (isset($package_yaml['install'][$state]['remove'])) {
+                foreach ((array) $package_yaml['install']['pre_install']['remove'] as $file) {
+                    Folder::delete($install_path . '/' . ltrim($file, '/'));
+                }
+            }
         }
-
-        self::$error = self::ZIP_EXTRACT_ERROR;
-        return false;
     }
 
-
-    /**
-     * Instantiates and returns the package installer class
-     *
-     * @param string $installer_file_folder The folder path that contains install.php
-     * @param bool $is_install True if install, false if removal
-     *
-     * @return null|string
-     */
-    private static function loadInstaller($installer_file_folder, $is_install)
+    public static function moveInstall(\ZipArchive $zip, $install_path, $tmp)
     {
-        $installer = null;
-
-        $installer_file_folder = rtrim($installer_file_folder, DS);
-
-        $install_file = $installer_file_folder . DS . 'install.php';
-
-        if (file_exists($install_file)) {
-            require_once($install_file);
-        } else {
-            return null;
-        }
-
-        if ($is_install) {
-            $slug = '';
-            if (($pos = strpos($installer_file_folder, 'grav-plugin-')) !== false) {
-                $slug = substr($installer_file_folder, $pos + strlen('grav-plugin-'));
-            } elseif (($pos = strpos($installer_file_folder, 'grav-theme-')) !== false) {
-                $slug = substr($installer_file_folder, $pos + strlen('grav-theme-'));
-            }
-        } else {
-            $path_elements = explode('/', $installer_file_folder);
-            $slug = end($path_elements);
-        }
-
-        if (!$slug) {
-            return null;
-        }
-
-        $class_name = ucfirst($slug) . 'Install';
-
-        if (class_exists($class_name)) {
-            return $class_name;
-        }
-
-        return $installer;
-    }
-
-    /**
-     * @param             $source_path
-     * @param             $install_path
-     *
-     * @return bool
-     */
-    public static function moveInstall($source_path, $install_path)
-    {
+        $container = $zip->getNameIndex(0);
         if (file_exists($install_path)) {
             Folder::delete($install_path);
         }
 
-        Folder::move($source_path, $install_path);
+        Folder::move($tmp . DS . $container, $install_path);
 
         return true;
     }
 
-    /**
-     * @param             $source_path
-     * @param             $install_path
-     *
-     * @return bool
-     */
-    public static function copyInstall($source_path, $install_path)
+    public static function copyInstall(\ZipArchive $zip, $install_path, $tmp)
     {
-        if (empty($source_path)) {
-            throw new \RuntimeException("Directory $source_path is missing");
+        $firstDir = $zip->getNameIndex(0);
+        if (empty($firstDir)) {
+            throw new \RuntimeException("Directory $firstDir is missing");
         } else {
-            Folder::rcopy($source_path, $install_path);
+            $tmp = realpath($tmp . DS . $firstDir);
+            Folder::rcopy($tmp, $install_path);
         }
 
         return true;
     }
 
-    /**
-     * @param             $source_path
-     * @param             $install_path
-     *
-     * @return bool
-     */
-    public static function sophisticatedInstall($source_path, $install_path, $ignores = [])
+    public static function sophisticatedInstall(\ZipArchive $zip, $install_path, $tmp)
     {
-        foreach (new \DirectoryIterator($source_path) as $file) {
+        for ($i = 0, $l = $zip->numFiles; $i < $l; $i++) {
+            $filename = $zip->getNameIndex($i);
+            $fileinfo = pathinfo($filename);
+            $depth = count(explode(DS, rtrim($filename, '/')));
 
-            if ($file->isLink() || $file->isDot() || in_array($file->getBasename(),$ignores)) {
+            if ($depth > 2) {
                 continue;
             }
 
-            $path = $install_path . DS . $file->getBasename();
+            $path = $install_path . DS . $fileinfo['basename'];
 
-            if ($file->isDir()) {
-                Folder::delete($path);
-                Folder::move($file->getPathname(), $path);
-
-                if ($file->getBasename() == 'bin') {
-                    foreach (glob($path . DS . '*') as $bin_file) {
-                        @chmod($bin_file, 0755);
-                    }
-                }
+            if (is_link($path)) {
+                continue;
             } else {
-                @unlink($path);
-                @copy($file->getPathname(), $path);
+                if (is_dir($path)) {
+                    Folder::delete($path);
+                    Folder::move($tmp . DS . $filename, $path);
+
+                    if ($fileinfo['basename'] == 'bin') {
+                        foreach (glob($path . DS . '*') as $file) {
+                            @chmod($file, 0755);
+                        }
+                    }
+                } else {
+                    @unlink($path);
+                    @copy($tmp . DS . $filename, $path);
+                }
             }
         }
 
@@ -312,8 +203,8 @@ class Installer
     /**
      * Uninstalls one or more given package
      *
-     * @param  string $path    The slug of the package(s)
-     * @param  array  $options Options to use for uninstalling
+     * @param  string $path     The slug of the package(s)
+     * @param  array  $options     Options to use for uninstalling
      *
      * @return boolean True if everything went fine, False otherwise.
      */
@@ -325,30 +216,7 @@ class Installer
             return false;
         }
 
-        $installer_file_folder = $path;
-        $is_install = false;
-        $installer = self::loadInstaller($installer_file_folder, $is_install);
-
-        if ($installer && method_exists($installer, 'preUninstall')) {
-            $method_result = $installer::preUninstall();
-            if ($method_result !== true) {
-                self::$error = 'An error occurred';
-                if (is_string($method_result)) {
-                    self::$error = $method_result;
-                }
-
-                return false;
-            }
-        }
-
-        $result = Folder::delete($path);
-
-        self::$message = '';
-        if ($result && $installer && method_exists($installer, 'postUninstall')) {
-            self::$message = $installer::postUninstall();
-        }
-
-        return $result;
+        return Folder::delete($path);
     }
 
     /**
@@ -406,23 +274,12 @@ class Installer
     }
 
     /**
-     * Returns the last message added by the installer
-     * @return string The message
-     */
-    public static function getMessage()
-    {
-        return self::$message;
-    }
-
-    /**
      * Returns the last error occurred in a string message format
      * @return string The message of the last error
      */
     public static function lastErrorMsg()
     {
-        if (is_string(self::$error)) {
-            return self::$error;
-        }
+        $msg = 'Unknown Error';
 
         switch (self::$error) {
             case 0:
@@ -458,7 +315,7 @@ class Installer
                 break;
 
             default:
-                $msg = 'Unknown Error';
+                return 'Unknown error';
                 break;
         }
 
@@ -476,8 +333,7 @@ class Installer
 
     /**
      * Allows to manually set an error
-     *
-     * @param int|string $error the Error code
+     * @param $error the Error code
      */
 
     public static function setError($error)

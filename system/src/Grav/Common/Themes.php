@@ -1,11 +1,4 @@
 <?php
-/**
- * @package    Grav.Common
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common;
 
 use Grav\Common\Config\Config;
@@ -16,6 +9,12 @@ use RocketTheme\Toolbox\Event\EventDispatcher;
 use RocketTheme\Toolbox\Event\EventSubscriberInterface;
 use RocketTheme\Toolbox\ResourceLocator\UniformResourceLocator;
 
+/**
+ * The Themes object holds an array of all the theme objects that Grav knows about.
+ *
+ * @author RocketTheme
+ * @license MIT
+ */
 class Themes extends Iterator
 {
     /** @var Grav */
@@ -24,17 +23,8 @@ class Themes extends Iterator
     /** @var Config */
     protected $config;
 
-    protected $inited = false;
-
-    /**
-     * Themes constructor.
-     *
-     * @param Grav $grav
-     */
     public function __construct(Grav $grav)
     {
-        parent::__construct();
-
         $this->grav = $grav;
         $this->config = $grav['config'];
 
@@ -44,38 +34,24 @@ class Themes extends Iterator
 
     public function init()
     {
+        /** @var EventDispatcher $events */
+        $events = $this->grav['events'];
+
         /** @var Themes $themes */
         $themes = $this->grav['themes'];
         $themes->configure();
 
-        $this->initTheme();
-    }
-
-    public function initTheme()
-    {
-        if ($this->inited === false) {
-            /** @var Themes $themes */
-            $themes = $this->grav['themes'];
-
-            try {
-                $instance = $themes->load();
-            } catch (\InvalidArgumentException $e) {
-                throw new \RuntimeException($this->current() . ' theme could not be found');
-            }
-
-            if ($instance instanceof EventSubscriberInterface) {
-                /** @var EventDispatcher $events */
-                $events = $this->grav['events'];
-
-                $events->addSubscriber($instance);
-            }
-
-            $this->grav['theme'] = $instance;
-
-            $this->grav->fireEvent('onThemeInitialized');
-
-            $this->inited = true;
+        try {
+            $instance = $themes->load();
+        } catch (\InvalidArgumentException $e) {
+            throw new \RuntimeException($this->current(). ' theme could not be found');
         }
+
+        if ($instance instanceof EventSubscriberInterface) {
+            $events->addSubscriber($instance);
+        }
+
+        $this->grav['theme'] = $instance;
     }
 
     /**
@@ -85,24 +61,21 @@ class Themes extends Iterator
      */
     public function all()
     {
-        $list = [];
+        $list = array();
+        $locator = Grav::instance()['locator'];
 
-        /** @var UniformResourceLocator $locator */
-        $locator = $this->grav['locator'];
+        $themes = (array) $locator->findResources('themes://', false);
+        foreach ($themes as $path) {
+            $iterator = new \DirectoryIterator($path);
 
-        $iterator = $locator->getIterator('themes://');
+            /** @var \DirectoryIterator $directory */
+            foreach ($iterator as $directory) {
+                if (!$directory->isDir() || $directory->isDot()) {
+                    continue;
+                }
 
-        /** @var \DirectoryIterator $directory */
-        foreach ($iterator as $directory) {
-            if (!$directory->isDir() || $directory->isDot()) {
-                continue;
-            }
-
-            $theme = $directory->getBasename();
-            $result = self::get($theme);
-
-            if ($result) {
-                $list[$theme] = $result;
+                $type = $directory->getBasename();
+                $list[$type] = self::get($type);
             }
         }
         ksort($list);
@@ -113,8 +86,7 @@ class Themes extends Iterator
     /**
      * Get theme configuration or throw exception if it cannot be found.
      *
-     * @param  string $name
-     *
+     * @param  string            $name
      * @return Data
      * @throws \RuntimeException
      */
@@ -126,27 +98,20 @@ class Themes extends Iterator
 
         $blueprints = new Blueprints('themes://');
         $blueprint = $blueprints->get("{$name}/blueprints");
-
-        // Load default configuration.
-        $file = CompiledYamlFile::instance("themes://{$name}/{$name}" . YAML_EXT);
-
-        // ensure this is a valid theme
-        if (!$file->exists()) {
-            return null;
-        }
+        $blueprint->name = $name;
 
         // Find thumbnail.
         $thumb = "themes://{$name}/thumbnail.jpg";
-        $path = $this->grav['locator']->findResource($thumb, false);
-
-        if ($path) {
+        if ($path = $this->grav['locator']->findResource($thumb, false)) {
             $blueprint->set('thumbnail', $this->grav['base_url'] . '/' . $path);
         }
 
+        // Load default configuration.
+        $file = CompiledYamlFile::instance("themes://{$name}/{$name}" . YAML_EXT);
         $obj = new Data($file->content(), $blueprint);
 
         // Override with user configuration.
-        $obj->merge($this->config->get('themes.' . $name) ?: []);
+        $obj->merge($this->grav['config']->get('themes.' . $name) ?: []);
 
         // Save configuration always to user/config.
         $file = CompiledYamlFile::instance("config://themes/{$name}" . YAML_EXT);
@@ -162,7 +127,7 @@ class Themes extends Iterator
      */
     public function current()
     {
-        return (string)$this->config->get('system.pages.theme');
+        return (string) $this->config->get('system.pages.theme');
     }
 
     /**
@@ -189,9 +154,10 @@ class Themes extends Iterator
 
             if (!is_object($class)) {
                 $themeClassFormat = [
-                    'Grav\\Theme\\' . ucfirst($name),
-                    'Grav\\Theme\\' . $inflector->camelize($name)
+                    'Grav\\Theme\\'.ucfirst($name),
+                    'Grav\\Theme\\'.$inflector->camelize($name)
                 ];
+                $themeClassName = false;
 
                 foreach ($themeClassFormat as $themeClass) {
                     if (class_exists($themeClass)) {
@@ -204,8 +170,6 @@ class Themes extends Iterator
         } elseif (!$locator('theme://') && !defined('GRAV_CLI')) {
             exit("Theme '$name' does not exist, unable to display page.");
         }
-
-        $this->config->set('theme', $config->get('themes.' . $name));
 
         if (empty($class)) {
             $class = new Theme($grav, $config, $name);
@@ -230,14 +194,10 @@ class Themes extends Iterator
         $locator = $this->grav['locator'];
 
         $registered = stream_get_wrappers();
-
-        $schemes = $config->get("themes.{$name}.streams.schemes", []);
-        $schemes += [
-            'theme' => [
-                'type' => 'ReadOnlyStream',
-                'paths' => $locator->findResources("themes://{$name}", false)
-            ]
-        ];
+        $schemes = $config->get(
+            "themes.{$name}.streams.schemes",
+            ['theme' => ['paths' => $locator->findResources("themes://{$name}", false)]]
+        );
 
         foreach ($schemes as $scheme => $config) {
             if (isset($config['paths'])) {
@@ -269,8 +229,8 @@ class Themes extends Iterator
     /**
      * Load theme configuration.
      *
-     * @param string $name   Theme name
-     * @param Config $config Configuration class
+     * @param string  $name    Theme name
+     * @param Config  $config  Configuration class
      */
     protected function loadConfiguration($name, Config $config)
     {
@@ -281,7 +241,7 @@ class Themes extends Iterator
     /**
      * Load theme languages.
      *
-     * @param Config $config Configuration class
+     * @param Config  $config  Configuration class
      */
     protected function loadLanguages(Config $config)
     {
@@ -289,24 +249,16 @@ class Themes extends Iterator
         $locator = $this->grav['locator'];
 
         if ($config->get('system.languages.translations', true)) {
-            $language_file = $locator->findResource("theme://languages" . YAML_EXT);
-            if ($language_file) {
-                $language = CompiledYamlFile::instance($language_file)->content();
-                $this->grav['languages']->mergeRecursive($language);
-            }
-            $languages_folder = $locator->findResource("theme://languages/");
-            if (file_exists($languages_folder)) {
-                $languages = [];
-                $iterator = new \DirectoryIterator($languages_folder);
+            $languageFiles = array_reverse($locator->findResources("theme://languages" . YAML_EXT));
 
-                /** @var \DirectoryIterator $directory */
-                foreach ($iterator as $file) {
-                    if ($file->getExtension() != 'yaml') {
-                        continue;
-                    }
-                    $languages[$file->getBasename('.yaml')] = CompiledYamlFile::instance($file->getPathname())->content();
-                }
-                $this->grav['languages']->mergeRecursive($languages);
+            $languages = [];
+            foreach ($languageFiles as $language) {
+                $languages[] = CompiledYamlFile::instance($language)->content();
+            }
+
+            if ($languages) {
+                $languages = call_user_func_array('array_replace_recursive', $languages);
+                $config->getLanguages()->mergeRecursive($languages);
             }
         }
     }
@@ -321,27 +273,21 @@ class Themes extends Iterator
      */
     protected function autoloadTheme($class)
     {
+        /** @var UniformResourceLocator $locator */
+        $locator = $this->grav['locator'];
+
         $prefix = "Grav\\Theme";
         if (false !== strpos($class, $prefix)) {
             // Remove prefix from class
             $class = substr($class, strlen($prefix));
 
-            // Try Old style theme classes
-            $path = strtolower(ltrim(preg_replace('#\\\|_(?!.+\\\)#', '/', $class), '/'));
-            $file = $this->grav['locator']->findResource("themes://{$path}/{$path}.php");
-
-            // Load class
-            if (file_exists($file)) {
-                return include_once($file);
-            }
-
             // Replace namespace tokens to directory separators
-            $path = $this->grav['inflector']->hyphenize(ltrim($class,"\\"));
-            $file = $this->grav['locator']->findResource("themes://{$path}/{$path}.php");
+            $path = ltrim(preg_replace('#\\\|_(?!.+\\\)#', '/', $class), '/');
+            $file = $locator->findResource("themes://{$path}/{$path}.php");
 
             // Load class
-            if (file_exists($file)) {
-                return include_once($file);
+            if (stream_resolve_include_path($file)) {
+              return include_once($file);
             }
         }
 

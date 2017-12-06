@@ -1,13 +1,13 @@
 <?php
-/**
- * @package    Grav.Common
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
 
 namespace Grav\Common;
 
+/**
+ * Offers composer helper methods.
+ *
+ * @author  eschmar
+ * @license MIT
+ */
 class Composer
 {
     /** @const Default composer location */
@@ -35,11 +35,6 @@ class Composer
         return $path;
     }
 
-    /**
-     * Return the composer executable file path
-     *
-     * @return string
-     */
     public static function getComposerExecutor()
     {
         $executor = PHP_BINARY . ' ';

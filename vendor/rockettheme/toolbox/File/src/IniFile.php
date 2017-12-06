@@ -65,7 +65,7 @@ class IniFile extends File
      */
     protected function decode($var)
     {
-        $var = file_exists($this->filename) ? @parse_ini_file($this->filename) : [];
+        $var = @parse_ini_file($this->filename);
 
         if ($var === false) {
             throw new \RuntimeException("Decoding file '{$this->filename}' failed'");

@@ -1,4 +1,0 @@
-name: Reynel Bobihi
-email: reynellbobihis@yahoo.com
-message: Test
-

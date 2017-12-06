@@ -1,19 +1,11 @@
 ---
 title: About
-title2: Contact Details
-address:
-    - line: Reynell Bobihis
-    - line: 2060-C J. Abad Santos St.
-    - line: Sta. Mesa, Manila 1016 PH
-    - line: (+63) 995 660 5955
-email:
-    - address: reynellbobihis@gmail.com
-buttons:
-    - url: "resume.pdf"
-      icon: download
-      text: Download Resume
 ---
-## About Me
 
-I've always been drawn to the overlap between design and development. My skills are broad: from graphic design to website development and programming. I enjoy each aspect, and love building sites from start to finish, for clients in any size.
-I'm available for remote work - if you would like to build something together, <a class="smoothscroll" href="#contact">scroll more</a>!
+## About Grayscale
+
+Grayscale is a free Bootstrap 3 theme created by Start Bootstrap and ported to Grav by [VC](http://vmcosta.net). It can be yours right now, simply download the template on [the preview page](http://startbootstrap.com/template-overviews/grayscale). The theme is open source, and you can use it for any purpose, personal or commercial.
+
+This theme features stock photos by [Gratisography](http://gratisography.com/) along with a custom Google Maps skin courtesy of [Snazzy Maps](http://snazzymaps.com/).
+
+Grayscale includes full HTML, CSS, and custom JavaScript files along with LESS files for easy customization.

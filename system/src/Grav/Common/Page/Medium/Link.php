@@ -1,15 +1,11 @@
 <?php
-/**
- * @package    Grav.Common.Page
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Page\Medium;
+
+use Grav\Common\GravTrait;
 
 class Link implements RenderableInterface
 {
+    use GravTrait;
     use ParsedownHtmlTrait;
 
     /**
@@ -36,13 +32,12 @@ class Link implements RenderableInterface
      * @param  string  $title
      * @param  string  $alt
      * @param  string  $class
-     * @param  string  $id
      * @param  boolean $reset
      * @return array
      */
-    public function parsedownElement($title = null, $alt = null, $class = null, $id = null, $reset = true)
+    public function parsedownElement($title = null, $alt = null, $class = null, $reset = true)
     {
-        $innerElement = $this->source->parsedownElement($title, $alt, $class, $id, $reset);
+        $innerElement = $this->source->parsedownElement($title, $alt, $class, $reset);
 
         return [
             'name' => 'a',
@@ -57,7 +52,7 @@ class Link implements RenderableInterface
      *
      * @param string $method
      * @param mixed $args
-     * @return mixed
+     * @return $this|mixed
      */
     public function __call($method, $args)
     {

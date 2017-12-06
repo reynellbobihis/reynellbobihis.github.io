@@ -1,19 +1,16 @@
 <?php
-/**
- * @package    Grav.Common.Twig
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Twig;
 
-use Grav\Common\Grav;
+use Grav\Common\GravTrait;
 
+/**
+ * A trait to add some custom processing to the identifyLink() method in Parsedown and ParsedownExtra
+ */
 trait WriteCacheFileTrait
 {
-    protected static $umask;
+    use GravTrait;
 
+    protected static $umask;
     /**
      * This exists so template cache files use the same
      * group between apache and cli
@@ -23,12 +20,8 @@ trait WriteCacheFileTrait
      */
     protected function writeCacheFile($file, $content)
     {
-        if (empty($file)) {
-            return;
-        }
-
         if (!isset(self::$umask)) {
-            self::$umask = Grav::instance()['config']->get('system.twig.umask_fix', false);
+            self::$umask = self::getGrav()['config']->get('system.twig.umask_fix', false);
         }
 
         if (self::$umask) {

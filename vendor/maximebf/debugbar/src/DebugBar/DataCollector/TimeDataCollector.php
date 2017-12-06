@@ -187,23 +187,12 @@ class TimeDataCollector extends DataCollector implements Renderable
         return microtime(true) - $this->requestStartTime;
     }
 
-    /**
-     * @return array
-     * @throws DebugBarException
-     */
     public function collect()
     {
         $this->requestEndTime = microtime(true);
         foreach (array_keys($this->startedMeasures) as $name) {
             $this->stopMeasure($name);
         }
-
-        usort($this->measures, function($a, $b) {
-            if ($a['start'] == $b['start']) {
-                return 0;
-            }
-            return $a['start'] < $b['start'] ? -1 : 1;
-        });
 
         return array(
             'start' => $this->requestStartTime,
@@ -214,17 +203,11 @@ class TimeDataCollector extends DataCollector implements Renderable
         );
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
         return 'time';
     }
 
-    /**
-     * @return array
-     */
     public function getWidgets()
     {
         return array(

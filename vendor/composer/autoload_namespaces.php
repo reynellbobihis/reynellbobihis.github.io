@@ -6,12 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Whoops' => array($vendorDir . '/filp/whoops/src'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Pimple' => array($vendorDir . '/pimple/pimple/src'),
     'ParsedownExtra' => array($vendorDir . '/erusev/parsedown-extra'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
-    'PHPExif' => array($vendorDir . '/miljar/php-exif/lib'),
     'Gregwar\\Image' => array($vendorDir . '/gregwar/image'),
     'Gregwar\\Cache' => array($vendorDir . '/gregwar/cache'),
-    'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/lib'),
+    'Doctrine\\Common\\Cache\\' => array($vendorDir . '/doctrine/cache/lib'),
+    'DebugBar' => array($vendorDir . '/maximebf/debugbar/src'),
 );

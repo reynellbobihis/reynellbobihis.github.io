@@ -1,27 +1,13 @@
 <?php
-/**
- * @package    Grav.Common.Page
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Page\Medium;
 
-use Grav\Common\Grav;
+use Grav\Common\GravTrait;
 use Gregwar\Image\Exceptions\GenerationError;
-use Gregwar\Image\Image;
 use RocketTheme\Toolbox\Event\Event;
 
-class ImageFile extends Image
+class ImageFile extends \Gregwar\Image\Image
 {
-    /**
-     * Clear previously applied operations
-     */
-    public function clearOperations()
-    {
-        $this->operations = [];
-    }
+    use GravTrait;
 
     /**
      * This is the same as the Gregwar Image class except this one fires a Grav Event on creation of new cached file
@@ -60,7 +46,6 @@ class ImageFile extends Image
             $cacheFile .= $this->prettyName;
         }
 
-
         $cacheFile .= '.'.$type;
 
         // If the files does not exists, save it
@@ -80,14 +65,12 @@ class ImageFile extends Image
                 throw new GenerationError($result);
             }
 
-            Grav::instance()->fireEvent('onImageMediumSaved', new Event(['image' => $target]));
+            self::getGrav()->fireEvent('onImageMediumSaved', new Event(['image' => $target]));
         };
 
         // Asking the cache for the cacheFile
         try {
-            $perms = Grav::instance()['config']->get('system.images.cache_perms', '0755');
-            $perms = octdec($perms);
-            $file = $this->cache->setDirectoryMode($perms)->getOrCreateFile($cacheFile, $conditions, $generate, $actual);
+            $file = $this->cache->getOrCreateFile($cacheFile, $conditions, $generate, $actual);
         } catch (GenerationError $e) {
             $file = $e->getNewFile();
         }

@@ -1,13 +1,13 @@
 <?php
-/**
- * @package    Grav.Common
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common;
 
+/**
+ * Abstract class to implement magic __get(), __set(), __isset() and __unset().
+ * Also implements ArrayAccess.
+ *
+ * @author RocketTheme
+ * @license MIT
+ */
 abstract class Getters implements \ArrayAccess, \Countable
 {
     /**
@@ -32,7 +32,6 @@ abstract class Getters implements \ArrayAccess, \Countable
      * Magic getter method
      *
      * @param  mixed $offset Medium name value
-     *
      * @return mixed         Medium value
      */
     public function __get($offset)
@@ -43,8 +42,7 @@ abstract class Getters implements \ArrayAccess, \Countable
     /**
      * Magic method to determine if the attribute is set
      *
-     * @param  mixed $offset Medium name value
-     *
+     * @param  mixed   $offset Medium name value
      * @return boolean         True if the value is set
      */
     public function __isset($offset)
@@ -64,14 +62,12 @@ abstract class Getters implements \ArrayAccess, \Countable
 
     /**
      * @param mixed $offset
-     *
      * @return bool
      */
     public function offsetExists($offset)
     {
         if ($this->gettersVariable) {
             $var = $this->gettersVariable;
-
             return isset($this->{$var}[$offset]);
         } else {
             return isset($this->{$offset});
@@ -80,14 +76,12 @@ abstract class Getters implements \ArrayAccess, \Countable
 
     /**
      * @param mixed $offset
-     *
      * @return mixed
      */
     public function offsetGet($offset)
     {
         if ($this->gettersVariable) {
             $var = $this->gettersVariable;
-
             return isset($this->{$var}[$offset]) ? $this->{$var}[$offset] : null;
         } else {
             return isset($this->{$offset}) ? $this->{$offset} : null;
@@ -143,17 +137,13 @@ abstract class Getters implements \ArrayAccess, \Countable
     {
         if ($this->gettersVariable) {
             $var = $this->gettersVariable;
-
             return $this->{$var};
         } else {
-            $properties = (array)$this;
-            $list = [];
+            $properties = (array) $this;
+            $list = array();
             foreach ($properties as $property => $value) {
-                if ($property[0] != "\0") {
-                    $list[$property] = $value;
-                }
+                if ($property[0] != "\0") $list[$property] = $value;
             }
-
             return $list;
         }
     }

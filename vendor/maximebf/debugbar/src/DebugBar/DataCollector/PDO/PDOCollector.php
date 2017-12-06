@@ -43,17 +43,11 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
         $this->sqlQuotationChar = $quotationChar;
     }
 
-    /**
-     * @return bool
-     */
     public function isSqlRenderedWithParams()
     {
         return $this->renderSqlWithParams;
     }
 
-    /**
-     * @return string
-     */
     public function getSqlQuotationChar()
     {
         return $this->sqlQuotationChar;
@@ -83,9 +77,6 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
         return $this->connections;
     }
 
-    /**
-     * @return array
-     */
     public function collect()
     {
         $data = array(
@@ -98,7 +89,7 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
         );
 
         foreach ($this->connections as $name => $pdo) {
-            $pdodata = $this->collectPDO($pdo, $this->timeCollector, $name);
+            $pdodata = $this->collectPDO($pdo, $this->timeCollector);
             $data['nb_statements'] += $pdodata['nb_statements'];
             $data['nb_failed_statements'] += $pdodata['nb_failed_statements'];
             $data['accumulated_duration'] += $pdodata['accumulated_duration'];
@@ -120,16 +111,10 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
      *
      * @param TraceablePDO $pdo
      * @param TimeDataCollector $timeCollector
-     * @param string|null $connectionName the pdo connection (eg default | read | write)
      * @return array
      */
-    protected function collectPDO(TraceablePDO $pdo, TimeDataCollector $timeCollector = null, $connectionName = null)
+    protected function collectPDO(TraceablePDO $pdo, TimeDataCollector $timeCollector = null)
     {
-        if (empty($connectionName) || $connectionName == 'default') {
-            $connectionName = 'pdo';
-        } else {
-            $connectionName = 'pdo ' . $connectionName;
-        }
         $stmts = array();
         foreach ($pdo->getExecutedStatements() as $stmt) {
             $stmts[] = array(
@@ -149,7 +134,7 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
                 'error_message' => $stmt->getErrorMessage()
             );
             if ($timeCollector !== null) {
-                $timeCollector->addMeasure($stmt->getSql(), $stmt->getStartTime(), $stmt->getEndTime(), array(), $connectionName);
+                $timeCollector->addMeasure($stmt->getSql(), $stmt->getStartTime(), $stmt->getEndTime());
             }
         }
 
@@ -166,22 +151,16 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
         );
     }
 
-    /**
-     * @return string
-     */
     public function getName()
     {
         return 'pdo';
     }
 
-    /**
-     * @return array
-     */
     public function getWidgets()
     {
         return array(
             "database" => array(
-                "icon" => "database",
+                "icon" => "inbox",
                 "widget" => "PhpDebugBar.Widgets.SQLQueriesWidget",
                 "map" => "pdo",
                 "default" => "[]"
@@ -193,9 +172,6 @@ class PDOCollector extends DataCollector implements Renderable, AssetProvider
         );
     }
 
-    /**
-     * @return array
-     */
     public function getAssets()
     {
         return array(

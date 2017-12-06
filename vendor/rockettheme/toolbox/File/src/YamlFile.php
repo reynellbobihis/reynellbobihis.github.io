@@ -75,7 +75,7 @@ class YamlFile extends File
             // Safely decode YAML.
             $saved = @ini_get('yaml.decode_php');
             @ini_set('yaml.decode_php', 0);
-            $data = @yaml_parse($data);
+            $data = @yaml_parse("---\n" . $data . "\n...");
             @ini_set('yaml.decode_php', $saved);
         }
 

@@ -1,23 +1,18 @@
 <?php
-/**
- * @package    Grav.Console
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Console;
 
-use Grav\Common\Grav;
-use Grav\Common\Composer;
 use Grav\Common\GravTrait;
+use Grav\Common\Composer;
 use Grav\Console\Cli\ClearCacheCommand;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class ConsoleTrait
+ * @package Grav\Console
+ */
 trait ConsoleTrait
 {
     use GravTrait;
@@ -41,11 +36,12 @@ trait ConsoleTrait
      */
     public function setupConsole(InputInterface $input, OutputInterface $output)
     {
-        // Initialize cache with CLI compatibility
-        Grav::instance()['config']->set('system.cache.cli_compatibility', true);
-        Grav::instance()['cache'];
+        if (self::getGrav()) {
+            self::getGrav()['config']->set('system.cache.driver', 'default');
+        }
 
         $this->argv = $_SERVER['argv'][0];
+
         $this->input  = $input;
         $this->output = $output;
 
@@ -111,22 +107,21 @@ trait ConsoleTrait
         $input = new ArrayInput($all);
         return $command->run($input, $this->output);
     }
-
+    
     /**
-     * Load the local config file
-     *
-     * @return mixed string the local config file name. false if local config does not exist
+     * Validate if the system is based on windows or not.
+     * 
+     * @return bool
      */
-    public function loadLocalConfig()
+    public function isWindows()
     {
-        $home_folder = getenv('HOME') ?: getenv('HOMEDRIVE') . getenv('HOMEPATH');
-        $local_config_file = $home_folder . '/.grav/config';
+        $keys = [
+            'CYGWIN_NT-5.1',
+            'WIN32',
+            'WINNT',
+            'Windows'
+        ];
 
-        if (file_exists($local_config_file)) {
-            $this->local_config = Yaml::parse(file_get_contents($local_config_file));
-            return $local_config_file;
-        }
-
-        return false;
+        return array_key_exists(PHP_OS, $keys);
     }
 }

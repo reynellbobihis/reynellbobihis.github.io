@@ -1,18 +1,21 @@
 <?php
-/**
- * @package    Grav.Common.Page
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Page\Medium;
 
-use Grav\Common\Grav;
+use Grav\Common\GravTrait;
 use Grav\Common\Data\Blueprint;
 
+/**
+ * MediumFactory can be used to more easily create various Medium objects from files or arrays, it should
+ * contain most logic for instantiating a Medium object.
+ *
+ * @author Grav
+ * @license MIT
+ *
+ */
 class MediumFactory
 {
+    use GravTrait;
+
     /**
      * Create Medium from a file
      *
@@ -26,15 +29,15 @@ class MediumFactory
             return null;
         }
 
-        $parts = pathinfo($file);
-        $path = $parts['dirname'];
-        $filename = $parts['basename'];
-        $ext = $parts['extension'];
-        $basename = $parts['filename'];
+        $path = dirname($file);
+        $filename = basename($file);
+        $parts = explode('.', $filename);
+        $ext = array_pop($parts);
+        $basename = implode('.', $parts);
 
-        $config = Grav::instance()['config'];
+        $config = self::getGrav()['config'];
 
-        $media_params = $config->get("media.types.".strtolower($ext));
+        $media_params = $config->get("media.".strtolower($ext));
         if (!$media_params) {
             return null;
         }
@@ -42,7 +45,7 @@ class MediumFactory
         $params += $media_params;
 
         // Add default settings for undefined variables.
-        $params += $config->get('media.types.defaults');
+        $params += $config->get('media.defaults');
         $params += [
             'type' => 'file',
             'thumb' => 'media/thumb.png',
@@ -56,11 +59,14 @@ class MediumFactory
             'thumbnails' => []
         ];
 
-        $locator = Grav::instance()['locator'];
+        $locator = self::getGrav()['locator'];
 
-        $file = $locator->findResource("image://{$params['thumb']}");
-        if ($file) {
-            $params['thumbnails']['default'] = $file;
+        $lookup = $locator->findResources('image://');
+        foreach ($lookup as $lookupPath) {
+            if (is_file($lookupPath . '/' . $params['thumb'])) {
+                $params['thumbnails']['default'] = $lookupPath . '/' . $params['thumb'];
+                break;
+            }
         }
 
         return static::fromArray($params);
@@ -119,27 +125,23 @@ class MediumFactory
         }
 
         $ratio = $to / $from;
-        $width = $medium->get('width') * $ratio;
-        $height = $medium->get('height') * $ratio;
+        $width = (int) ($medium->get('width') * $ratio);
+        $height = (int) ($medium->get('height') * $ratio);
 
-        $prev_basename = $medium->get('basename');
-        $basename = str_replace('@'.$from.'x', '@'.$to.'x', $prev_basename);
+        $basename = $medium->get('basename');
+        $basename = str_replace('@'.$from.'x', '@'.$to.'x', $basename);
 
         $debug = $medium->get('debug');
         $medium->set('debug', false);
-        $medium->setImagePrettyName($basename);
 
         $file = $medium->resize($width, $height)->path();
 
         $medium->set('debug', $debug);
-        $medium->setImagePrettyName($prev_basename);
 
         $size = filesize($file);
 
         $medium = self::fromFile($file);
-        if ($medium) {
-            $medium->set('size', $size);
-        }
+        $medium->set('size', $size);
 
         return ['file' => $medium, 'size' => $size];
     }

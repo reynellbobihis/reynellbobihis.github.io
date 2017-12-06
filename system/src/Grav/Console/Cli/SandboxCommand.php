@@ -1,64 +1,67 @@
 <?php
-/**
- * @package    Grav.Console
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Console\Cli;
 
-use Grav\Console\ConsoleCommand;
 use Grav\Common\Filesystem\Folder;
+use Grav\Console\ConsoleTrait;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class SandboxCommand extends ConsoleCommand
+/**
+ * Class SandboxCommand
+ * @package Grav\Console\Cli
+ */
+class SandboxCommand extends Command
 {
+    use ConsoleTrait;
+
     /**
      * @var array
      */
-    protected $directories = [
-        '/assets',
+    protected $directories = array(
         '/backup',
         '/cache',
-        '/images',
         '/logs',
-        '/tmp',
+        '/images',
+        '/assets',
         '/user/accounts',
         '/user/config',
-        '/user/data',
         '/user/pages',
+        '/user/data',
         '/user/plugins',
         '/user/themes',
-    ];
+    );
 
     /**
      * @var array
      */
-    protected $files = [
+    protected $files = array(
         '/.dependencies',
         '/.htaccess',
+        '/nginx.conf',
+        '/web.config',
         '/user/config/site.yaml',
         '/user/config/system.yaml',
-    ];
+    );
 
     /**
      * @var array
      */
-    protected $mappings = [
-        '/.gitignore'           => '/.gitignore',
-        '/CHANGELOG.md'         => '/CHANGELOG.md',
-        '/LICENSE.txt'          => '/LICENSE.txt',
-        '/README.md'            => '/README.md',
-        '/CONTRIBUTING.md'      => '/CONTRIBUTING.md',
-        '/index.php'            => '/index.php',
-        '/composer.json'        => '/composer.json',
-        '/bin'                  => '/bin',
-        '/system'               => '/system',
-        '/vendor'               => '/vendor',
-        '/webserver-configs'    => '/webserver-configs',
-    ];
+    protected $mappings = array(
+        '/.editorconfig' => '/.editorconfig',
+        '/.gitignore' => '/.gitignore',
+        '/CHANGELOG.md' => '/CHANGELOG.md',
+        '/LICENSE' => '/LICENSE',
+        '/README.md' => '/README.md',
+        '/index.php'     => '/index.php',
+        '/composer.json' => '/composer.json',
+        '/bin'           => '/bin',
+        '/system'        => '/system',
+        '/vendor'        => '/vendor',
+    );
 
     /**
      * @var string
@@ -93,14 +96,18 @@ class SandboxCommand extends ConsoleCommand
     }
 
     /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return int|null|void
      */
-    protected function serve()
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->destination = $this->input->getArgument('destination');
+        $this->setupConsole($input, $output);
+        $this->destination = $input->getArgument('destination');
 
         // Symlink the Core Stuff
-        if ($this->input->getOption('symlink')) {
+        if ($input->getOption('symlink')) {
             // Create Some core stuff if it doesn't exist
             $this->createDirectories();
 
@@ -165,7 +172,7 @@ class SandboxCommand extends ConsoleCommand
             $to = $this->destination . $target;
 
             $this->output->writeln('    <cyan>' . $source . '</cyan> <comment>-></comment> ' . $to);
-            @Folder::rcopy($from, $to);
+            Folder::rcopy($from, $to);
         }
     }
 
@@ -202,7 +209,7 @@ class SandboxCommand extends ConsoleCommand
      */
     private function initFiles()
     {
-        $this->check();
+        $this->check($this->output);
 
         $this->output->writeln('');
         $this->output->writeln('<comment>File Initializing</comment>');
@@ -227,6 +234,8 @@ class SandboxCommand extends ConsoleCommand
         if (!$files_init) {
             $this->output->writeln('    <red>Files already exist</red>');
         }
+
+
     }
 
     /**
@@ -239,7 +248,7 @@ class SandboxCommand extends ConsoleCommand
 
         // get pages files and initialize if no pages exist
         $pages_dir = $this->destination . '/user/pages';
-        $pages_files = array_diff(scandir($pages_dir), ['..', '.']);
+        $pages_files = array_diff(scandir($pages_dir), array('..', '.'));
 
         if (count($pages_files) == 0) {
             $destination = $this->source . '/user/pages';
@@ -269,6 +278,7 @@ class SandboxCommand extends ConsoleCommand
         $this->output->writeln("");
     }
 
+
     /**
      *
      */
@@ -294,7 +304,6 @@ class SandboxCommand extends ConsoleCommand
                 $success = false;
             }
         }
-
         if (!$success) {
             $this->output->writeln('');
             $this->output->writeln('<comment>install should be run with --symlink|--s to symlink first</comment>');

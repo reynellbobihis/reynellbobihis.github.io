@@ -1,20 +1,21 @@
 <?php
-/**
- * @package    Grav.Common.Page
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Page\Medium;
 
 use Grav\Common\File\CompiledYamlFile;
-use Grav\Common\Grav;
+use Grav\Common\GravTrait;
 use Grav\Common\Data\Data;
 use Grav\Common\Data\Blueprint;
 
+/**
+ * The Medium is a general class for multimedia objects in Grav pages, specific implementations will derive from
+ *
+ * @author Grav
+ * @license MIT
+ *
+ */
 class Medium extends Data implements RenderableInterface
 {
+    use GravTrait;
     use ParsedownHtmlTrait;
 
     /**
@@ -50,11 +51,6 @@ class Medium extends Data implements RenderableInterface
     protected $styleAttributes = [];
 
     /**
-     * @var array
-     */
-    protected $metadata = [];
-
-    /**
      * Construct.
      *
      * @param array $items
@@ -64,8 +60,8 @@ class Medium extends Data implements RenderableInterface
     {
         parent::__construct($items, $blueprint);
 
-        if (Grav::instance()['config']->get('system.media.enable_media_timestamp', true)) {
-            $this->querystring('&' . Grav::instance()['cache']->getKey());
+        if (self::getGrav()['config']->get('system.media.enable_media_timestamp', true)) {
+            $this->querystring('&' . self::getGrav()['cache']->getKey());
         }
 
         $this->def('mime', 'application/octet-stream');
@@ -75,21 +71,11 @@ class Medium extends Data implements RenderableInterface
     /**
      * Return just metadata from the Medium object
      *
-     * @return Data
+     * @return $this
      */
     public function meta()
     {
         return new Data($this->items);
-    }
-
-    /**
-     * Returns an array containing just the metadata
-     *
-     * @return array
-     */
-    public function metadata()
-    {
-        return $this->metadata;
     }
 
     /**
@@ -99,8 +85,7 @@ class Medium extends Data implements RenderableInterface
      */
     public function addMetaFile($filepath)
     {
-        $this->metadata = (array)CompiledYamlFile::instance($filepath)->content();
-        $this->merge($this->metadata);
+        $this->merge(CompiledYamlFile::instance($filepath)->content());
     }
 
     /**
@@ -116,9 +101,7 @@ class Medium extends Data implements RenderableInterface
         }
 
         $alternative->set('ratio', $ratio);
-        $width = $alternative->get('width');
-
-        $this->alternatives[$width] = $alternative;
+        $this->alternatives[(float) $ratio] = $alternative;
     }
 
     /**
@@ -135,7 +118,7 @@ class Medium extends Data implements RenderableInterface
      * Return PATH to file.
      *
      * @param bool $reset
-     * @return string path to file
+     * @return  string path to file
      */
     public function path($reset = true)
     {
@@ -147,21 +130,6 @@ class Medium extends Data implements RenderableInterface
     }
 
     /**
-     * Return the relative path to file
-     *
-     * @param bool $reset
-     * @return mixed
-     */
-    public function relativePath($reset = true)
-    {
-        if ($reset) {
-            $this->reset();
-        }
-
-        return str_replace(GRAV_ROOT, '', $this->get('filepath'));
-    }
-
-    /**
      * Return URL to file.
      *
      * @param bool $reset
@@ -169,25 +137,25 @@ class Medium extends Data implements RenderableInterface
      */
     public function url($reset = true)
     {
-        $output = preg_replace('|^' . preg_quote(GRAV_ROOT) . '|', '', $this->get('filepath'));
+        $output = preg_replace('|^' . GRAV_ROOT . '|', '', $this->get('filepath'));
 
         if ($reset) {
             $this->reset();
         }
 
-        return trim(Grav::instance()['base_url'] . '/' . ltrim($output . $this->querystring() . $this->urlHash(), '/'), '\\');
+        return self::$grav['base_url'] . $output . $this->querystring() . $this->urlHash();
     }
 
     /**
      * Get/set querystring for the file's url
      *
-     * @param  string  $querystring
-     * @param  boolean $withQuestionmark
+     * @param  string  $hash
+     * @param  boolean $withHash
      * @return string
      */
     public function querystring($querystring = null, $withQuestionmark = true)
     {
-        if (!is_null($querystring)) {
+        if ($querystring) {
             $this->set('querystring', ltrim($querystring, '?&'));
 
             foreach ($this->alternatives as $alt) {
@@ -232,24 +200,18 @@ class Medium extends Data implements RenderableInterface
      * @param  string  $title
      * @param  string  $alt
      * @param  string  $class
-     * @param  string  $id
      * @param  boolean $reset
      * @return array
      */
-    public function parsedownElement($title = null, $alt = null, $class = null, $id = null, $reset = true)
+    public function parsedownElement($title = null, $alt = null, $class = null, $reset = true)
     {
         $attributes = $this->attributes;
 
         $style = '';
         foreach ($this->styleAttributes as $key => $value) {
-            if (is_numeric($key)) // Special case for inline style attributes, refer to style() method
-                $style .= $value;
-            else
-                $style .= $key . ': ' . $value . ';';
+            $style .= $key . ': ' . $value . ';';
         }
-        if ($style) {
-            $attributes['style'] = $style;
-        }
+        $attributes['style'] = $style;
 
         if (empty($attributes['title'])) {
             if (!empty($title)) {
@@ -260,7 +222,7 @@ class Medium extends Data implements RenderableInterface
         }
 
         if (empty($attributes['alt'])) {
-            if (!empty($alt) || $alt === '') {
+            if (!empty($alt)) {
                 $attributes['alt'] = $alt;
             } elseif (!empty($this->items['alt'])) {
                 $attributes['alt'] = $this->items['alt'];
@@ -272,14 +234,6 @@ class Medium extends Data implements RenderableInterface
                 $attributes['class'] = $class;
             } elseif (!empty($this->items['class'])) {
                 $attributes['class'] = $this->items['class'];
-            }
-        }
-
-        if (empty($attributes['id'])) {
-            if (!empty($id)) {
-                $attributes['id'] = $id;
-            } elseif (!empty($this->items['id'])) {
-                $attributes['id'] = $this->items['id'];
             }
         }
 
@@ -435,51 +389,6 @@ class Medium extends Data implements RenderableInterface
     }
 
     /**
-     * Add a class to the element from Markdown or Twig
-     * Example: ![Example](myimg.png?classes=float-left) or ![Example](myimg.png?classes=myclass1,myclass2)
-     *
-     * @return $this
-     */
-    public function classes()
-    {
-        $classes = func_get_args();
-        if (!empty($classes)) {
-            $this->attributes['class'] = implode(',', (array)$classes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add an id to the element from Markdown or Twig
-     * Example: ![Example](myimg.png?id=primary-img)
-     *
-     * @param $id
-     * @return $this
-     */
-    public function id($id)
-    {
-        if (is_string($id)) {
-            $this->attributes['id'] = trim($id);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Allows to add an inline style attribute from Markdown or Twig
-     * Example: ![Example](myimg.png?style=float:left)
-     *
-     * @param string $style
-     * @return $this
-     */
-    public function style($style)
-    {
-        $this->styleAttributes[] = rtrim($style, ';') . ';';
-        return $this;
-    }
-
-    /**
      * Allow any action to be called on this medium from twig or markdown
      *
      * @param string $method
@@ -531,5 +440,4 @@ class Medium extends Data implements RenderableInterface
 
         return $this->_thumbnail;
     }
-
 }

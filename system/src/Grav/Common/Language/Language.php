@@ -1,16 +1,11 @@
 <?php
-/**
- * @package    Grav.Common.Language
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Common\Language;
 
 use Grav\Common\Grav;
-use Grav\Common\Config\Config;
 
+/**
+ * Language and translation functionality for Grav
+ */
 class Language
 {
     protected $grav;
@@ -20,10 +15,7 @@ class Language
     protected $fallback_languages = [];
     protected $default;
     protected $active = null;
-
-    /** @var Config $config */
     protected $config;
-
     protected $http_accept_language;
     protected $lang_in_url = false;
 
@@ -170,7 +162,7 @@ class Language
      */
     public function setActiveFromUri($uri)
     {
-        $regex = '/(^\/(' . $this->getAvailable() . '))(?:\/|\?|$)/i';
+        $regex = '/(^\/(' . $this->getAvailable() . '))(?:\/.*|$)/i';
 
         // if languages set
         if ($this->enabled()) {
@@ -178,7 +170,7 @@ class Language
             if (preg_match($regex, $uri, $matches)) {
                 $this->lang_in_url = true;
                 $this->active = $matches[2];
-                $uri = preg_replace("/\\" . $matches[1] . "/", '', $uri, 1);
+                $uri = preg_replace("/\\" . $matches[1] . "/", '', $matches[0], 1);
 
                 // store in session if different
                 if ($this->config->get('system.session.enabled', false)
@@ -203,15 +195,6 @@ class Language
                         }
                     }
 
-                    // repeat if not found, try base language only - fixes Safari sending the language code always
-                    // with a locale (e.g. it-it or fr-fr)
-                    foreach ($preferred as $lang) {
-                        $lang = substr($lang, 0, 2);
-                        if ($this->validate($lang)) {
-                            $this->active = $lang;
-                            break;
-                        }
-                    }
                 }
             }
         }
@@ -269,8 +252,6 @@ class Language
     /**
      * Gets an array of valid extensions with active first, then fallback extensions
      *
-     * @param string|null $file_ext
-     *
      * @return array
      */
     public function getFallbackPageExtensions($file_ext = null)
@@ -300,21 +281,6 @@ class Language
         }
 
         return $this->page_extensions;
-    }
-
-    /**
-     * Resets the page_extensions value.
-     *
-     * Useful to re-initialize the pages and change site language at runtime, example:
-     *
-     * ```
-     * $this->grav['language']->setActive('it');
-     * $this->grav['language']->resetFallbackPageExtensions();
-     * $this->grav['pages']->init();
-     * ```
-     */
-    public function resetFallbackPageExtensions() {
-        $this->page_extensions = null;
     }
 
     /**
@@ -362,15 +328,15 @@ class Language
     /**
      * Translate a key and possibly arguments into a string using current lang and fallbacks
      *
-     * @param mixed $args      The first argument is the lookup key value
-     *                         Other arguments can be passed and replaced in the translation with sprintf syntax
-     * @param array $languages
+     * @param       $args       first argument is the lookup key value
+     *                          other arguments can be passed and replaced in the translation with sprintf syntax
+     * @param Array $languages
      * @param bool  $array_support
      * @param bool  $html_out
      *
      * @return string
      */
-    public function translate($args, array $languages = null, $array_support = false, $html_out = false)
+    public function translate($args, Array $languages = null, $array_support = false, $html_out = false)
     {
         if (is_array($args)) {
             $lookup = array_shift($args);
@@ -379,13 +345,14 @@ class Language
             $args = [];
         }
 
+
         if ($this->config->get('system.languages.translations', true)) {
             if ($this->enabled() && $lookup) {
                 if (empty($languages)) {
                     if ($this->config->get('system.languages.translations_fallback', true)) {
                         $languages = $this->getFallbackLanguages();
                     } else {
-                        $languages = (array)$this->getLanguage();
+                        $languages = (array)$this->getDefault();
                     }
                 }
             } else {
@@ -438,7 +405,7 @@ class Language
             }
 
             foreach ((array)$languages as $lang) {
-                $translation_array = (array)Grav::instance()['languages']->get($lang . '.' . $key, null);
+                $translation_array = (array)$this->config->getLanguages()->get($lang . '.' . $key, null);
                 if ($translation_array && array_key_exists($index, $translation_array)) {
                     return $translation_array[$index];
                 }
@@ -455,15 +422,15 @@ class Language
     /**
      * Lookup the translation text for a given lang and key
      *
-     * @param string $lang lang code
-     * @param string $key  key to lookup with
+     * @param      $lang lang code
+     * @param      $key  key to lookup with
      * @param bool $array_support
      *
      * @return string
      */
     public function getTranslation($lang, $key, $array_support = false)
     {
-        $translation = Grav::instance()['languages']->get($lang . '.' . $key, null);
+        $translation = $this->config->getLanguages()->get($lang . '.' . $key, null);
         if (!$array_support && is_array($translation)) {
             return (string)array_shift($translation);
         }
@@ -471,13 +438,6 @@ class Language
         return $translation;
     }
 
-    /**
-     * Get the browser accepted languages
-     *
-     * @param array $accept_langs
-     *
-     * @return array
-     */
     public function getBrowserLanguages($accept_langs = [])
     {
         if (empty($this->http_accept_language)) {
@@ -491,9 +451,9 @@ class Language
                 // split $pref again by ';q='
                 // and decorate the language entries by inverted position
                 if (false !== ($i = strpos($pref, ';q='))) {
-                    $langs[substr($pref, 0, $i)] = [(float)substr($pref, $i + 3), -$k];
+                    $langs[substr($pref, 0, $i)] = array((float)substr($pref, $i + 3), -$k);
                 } else {
-                    $langs[$pref] = [1, -$k];
+                    $langs[$pref] = array(1, -$k);
                 }
             }
             arsort($langs);

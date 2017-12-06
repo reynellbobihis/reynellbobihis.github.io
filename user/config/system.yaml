@@ -2,7 +2,7 @@ home:
   alias: '/home'
 
 pages:
-  theme: ceevee
+  theme: grayscale
   process:
     markdown: true
     twig: false
@@ -10,7 +10,7 @@ pages:
     extra: true  
 
 cache:
-  enabled: false
+  enabled: true
   check:
     method: file
   driver: auto

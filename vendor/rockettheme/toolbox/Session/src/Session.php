@@ -20,14 +20,12 @@ class Session implements \IteratorAggregate
      */
     static $instance;
 
-    
     /**
      * @param int    $lifetime Defaults to 1800 seconds.
      * @param string $path     Cookie path.
-     * @param string $domain   Optional, domain for the session
      * @throws \RuntimeException
      */
-    public function __construct($lifetime, $path, $domain = null)
+    public function __construct($lifetime, $path)
     {
         // Session is a singleton.
         if (isset(self::$instance)) {
@@ -35,7 +33,7 @@ class Session implements \IteratorAggregate
         }
 
         // Destroy any existing sessions started with session.auto_start
-        if ($this->isSessionStarted())
+        if (session_id())
         {
             session_unset();
             session_destroy();
@@ -48,7 +46,7 @@ class Session implements \IteratorAggregate
         ini_set('session.use_cookies', 1);
 
         session_name('msF9kJcW');
-        session_set_cookie_params($lifetime, $path, $domain);
+        session_set_cookie_params($lifetime, $path);
         register_shutdown_function([$this, 'close']);
         session_cache_limiter('nocache');
 
@@ -84,11 +82,6 @@ class Session implements \IteratorAggregate
      */
     public function start()
     {
-        // Protection against invalid session cookie names throwing exception: http://php.net/manual/en/function.session-id.php#116836
-        if (isset($_COOKIE[session_name()]) && !preg_match('/^[-,a-zA-Z0-9]{1,128}$/', $_COOKIE[session_name()])) {
-            unset($_COOKIE[session_name()]);
-        }
-
         if (!session_start()) {
             throw new \RuntimeException('Failed to start session.', 500);
         }
@@ -223,6 +216,8 @@ class Session implements \IteratorAggregate
      * Removes an attribute.
      *
      * @param string $name
+     *
+     * @return mixed The removed value or null when it does not exist
      */
     public function __unset($name)
     {
@@ -258,15 +253,5 @@ class Session implements \IteratorAggregate
     public function started()
     {
         return $this->started;
-    }
-
-    /**
-     * http://php.net/manual/en/function.session-status.php#113468
-     * Check if session is started nicely.
-     * @return bool
-     */
-    protected function isSessionStarted()
-    {
-        return php_sapi_name() !== 'cli' ? session_id() !== '' : false;
     }
 }

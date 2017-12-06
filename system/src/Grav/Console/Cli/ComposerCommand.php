@@ -1,18 +1,23 @@
 <?php
-/**
- * @package    Grav.Console
- *
- * @copyright  Copyright (C) 2014 - 2017 RocketTheme, LLC. All rights reserved.
- * @license    MIT License; see LICENSE file for details.
- */
-
 namespace Grav\Console\Cli;
 
-use Grav\Console\ConsoleCommand;
+use Grav\Console\ConsoleTrait;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Formatter\OutputFormatterStyle;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
-class ComposerCommand extends ConsoleCommand
+/**
+ * Class ComposerCommand
+ * @package Grav\Console\Cli
+ */
+class ComposerCommand extends Command
 {
+    use ConsoleTrait;
+
     /**
      * @var
      */
@@ -54,19 +59,24 @@ class ComposerCommand extends ConsoleCommand
     }
 
     /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
      * @return int|null|void
      */
-    protected function serve()
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $action = $this->input->getOption('install') ? 'install' : ($this->input->getOption('update') ? 'update' : 'install');
+        $this->setupConsole($input, $output);
 
-        if ($this->input->getOption('install')) {
+        $action = $input->getOption('install') ? 'install' : ($input->getOption('update') ? 'update' : 'install');
+
+        if ($input->getOption('install')) {
             $action = 'install';
         }
 
         // Updates composer first
-        $this->output->writeln("\nInstalling vendor dependencies");
-        $this->output->writeln($this->composerUpdate(GRAV_ROOT, $action));
+        $output->writeln("\nInstalling vendor dependencies");
+        $output->writeln($this->composerUpdate(GRAV_ROOT, $action));
     }
 
 }
