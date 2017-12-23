@@ -20,6 +20,9 @@
     <link href="vendor/devicons/css/devicons.min.css" rel="stylesheet">
     <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
 
+    <!-- Swiper CSS -->
+    <link href="css/swiper.min.css" rel="stylesheet">
+
     <!-- Custom styles for this template -->
     <link href="css/resume.min.css" rel="stylesheet">
 
@@ -29,7 +32,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
       <a class="navbar-brand js-scroll-trigger" href="#page-top">
-        <span class="d-block d-lg-none">Start Bootstrap</span>
+        <span class="d-block d-lg-none">Reynell Bobihis</span>
         <span class="d-none d-lg-block">
           <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.jpg" alt="">
         </span>
@@ -138,7 +141,7 @@
             <div class="resume-content mr-auto">
               <h3 class="mb-0">Upwork Global Inc. </h3>
               <div class="subheading mb-3">Freelancer</div>
-              <p>Through Upwork businesses get more done, connecting with freelancers to work on projects from web and mobile app development to SEO, social media marketing, content writing, graphic design, admin help and thousands of other projects. Upwork makes it fast, simple, and cost-effective to find, hire, work with, and pay the best professionals anywhere, any time.</p>
+              <p>Upwork, formerly Elance-oDesk, is a global freelancing platform where businesses and independent professionals connect and collaborate remotely. In 2015, Elance-oDesk was rebranded as Upwork. It is based in Mountain View and San Francisco, California.</p>
             </div>
             <div class="resume-date text-md-right">
               <span class="text-primary">November 2017 - Present</span>
@@ -268,75 +271,80 @@
         <div class="my-auto">
           <h2 class="mb-5">Portfolio</h2>
 
-          <div class="mb-5 float-left clearfix p-0">
+          <div class="swiper-container mb-5 float-left clearfix p-0">
 
             <h3 class="mb-5">Web Development</h3>
 
-            <div class="portfolio-wd-item float-left mb-5 col-4 p-0 p-3">
-              <div class="card">
-                <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_socialstreat.png" alt=" ">
-                <div class="card-block p-4">
-                  <a class="card-button" href="http://www.socialstreat.org/" target="_blank"><i class="fa fa-hand-o-up"></i></a>
-                  <h3 class="card-title">Social StrEAT</h3>
-                  <p class="card-text mb-4">
-                    This is a responsive, mobile first, custom-themed WordPress site that I created as an intern at Offshorly, Ltd.
-                    It uses SASS, Bootstrap, Grunt Compiler, and ACF, Ajax and Instagram Plugins.</p>
-                  <p class="mb-2 text-muted">
-                    <i class="fa fa-tags"></i>
-                    <span class="ml-1">WordPress</span>
-                  </p>
+            <div class="r-swiper-button r-swiper-button-prev"><i class="fa fa-chevron-left"></i></div>
+            <div class="r-swiper-button r-swiper-button-next"><i class="fa fa-chevron-right"></i></div>
+
+            <div class="swiper-wrapper">
+
+              <div class="swiper-slide portfolio-wd-item">
+                <div class="card">
+                  <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_socialstreat.png" alt=" ">
+                  <div class="card-block p-4">
+                    <a class="card-button" href="http://www.socialstreat.org/" target="_blank"><i class="fa fa-hand-o-up"></i></a>
+                    <h3 class="card-title">Social StrEAT</h3>
+                    <p class="card-text mb-4">
+                      This is a responsive, mobile first, custom-themed WordPress site that I created as an intern at Offshorly Ltd.
+                      It uses SASS, Bootstrap, Grunt Compiler, and ACF, Ajax and Instagram Plugins.</p>
+                    <p class="card-text mb-2 text-muted">
+                      <i class="fa fa-tags"></i>
+                      <span class="ml-1">WordPress</span>
+                    </p>
+                  </div>
                 </div>
               </div>
+
+              <div class="swiper-slide portfolio-wd-item">
+                <div class="card">
+                  <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_bioquick.png" alt=" ">
+                  <div class="card-block p-4">
+                    <a class="card-button" href="http://www.bioquick.xyz" target="_blank"><i class="fa fa-hand-o-up"></i></a>
+                    <h3 class="card-title">BioQuick</h3>
+                    <p class="card-text mb-4">
+                      This is a responsive WordPress site for BioQuick Medical Enterprise Inc. that I built to use in a project in System Analysis and Design.
+                      It uses WooCommerce, ACF and SASS technology, among others.</p>
+                    <p class="card-text mb-2 text-muted">
+                      <i class="fa fa-tags"></i>
+                      <span class="ml-1">WordPress,</span>
+                      <span class="ml-1">E-Commerce</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="swiper-slide portfolio-wd-item">
+                <div class="card">
+                  <div>
+                    <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_offshorly.png" alt=" ">
+                  </div>
+                  <div class="card-block p-4">
+                    <a class="card-button" href="http://www.bioquick.xyz/offshorly" target="_blank"><i class="fa fa-hand-o-up"></i></a>
+                    <h3 class="card-title">Offshorly</h3>
+                    <p class="card-text mb-4">
+                      This is a responsive web site built with Grav.
+                      It uses Gantry5, SASS, Markdown and Twig Templating Engine.
+                      I created this as an intern at Offshorly Ltd.</p>
+                    <p class="card-text mb-2 text-muted">
+                      <i class="fa fa-tags"></i>
+                      <span class="ml-1">Grav,</span>
+                      <span class="ml-1">Gantry5</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
-            <div class="portfolio-wd-item float-left mb-5 col-4 p-0 p-3">
-              <div class="card">
-                <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_bioquick.png" alt=" ">
-                <div class="card-block p-4">
-                  <a class="card-button" href="http://www.bioquick.xyz" target="_blank"><i class="fa fa-hand-o-up"></i></a>
-                  <h3 class="card-title">BioQuick</h3>
-                  <p class="card-text mb-4">
-                    This is a responsive WordPress site I built to use in a project in System Analysis and Design.
-                    It used WooCommerce, ACF and SASS technology, among others.</p>
-                  <p class="mb-2 text-muted">
-                    <i class="fa fa-tags"></i>
-                    <span class="ml-1">WordPress,</span>
-                    <span class="ml-1">E-Commerce</span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="portfolio-wd-item float-left mb-5 col-4 p-0 p-3">
-              <div class="card">
-                <div>
-                  <img class="card-img-top" src="/reynellbobihis.github.io/img/thumb/thumb_offshorly.png" alt=" ">
-                </div>
-                <div class="card-block p-4">
-                  <a class="card-button" href="http://www.bioquick.xyz/offshorly" target="_blank"><i class="fa fa-hand-o-up"></i></a>
-                  <h3 class="card-title">Offshorly</h3>
-                  <p class="card-text mb-4">
-                    This is a responsive web site built with Grav.
-                    It uses Gantry 5, SASS, Markdown and Twig Template Engine.
-                    I created this as an intern at Offshorly, Ltd.</p>
-                  <p class="mb-2 text-muted">
-                    <i class="fa fa-tags"></i>
-                    <span class="ml-1">Grav</span>
-                  </p>
-                </div>
-              </div>
-            </div>
+            <div class="swiper-pagination"></div>
 
           </div>
 
           <div class="mb-5 float-left clearfix p-0">
 
             <h3 class="mb-5">Graphic Design</h3>
-
-            <div class="d-flex flex-column flex-md-row mb-5">
-              <a class="subheading mb-3" href="">Offshorly</a>
-              <img src="">
-            </div>
 
           </div>
 
@@ -347,7 +355,7 @@
         <div class="my-auto">
           <h2 class="mb-5">Interests</h2>
           <p>Apart from being a web developer, I enjoy most of my time hanging out with my friends. Also sometimes, I follow a number of sci-fi, animated and fantasy genre movies and television shows.</p>
-          <p class="mb-0">I love organizing things and creating automations for my devices. I spend a large amount of my free time listening to music and organizing my playlists. I listen to all kinds of music depending on my mood but my favorites are indie rock, alternative and electronic dance music.</p>
+          <p class="mb-0">I love organizing things and using automations for my devices. I spend a large amount of my free time listening to music and organizing my playlists. I listen to all kinds of music depending on my mood but my favorites are indie rock, alternative and electronic dance music.</p>
         </div>
       </section>
 
@@ -359,6 +367,9 @@
 
     <!-- Plugin JavaScript -->
     <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Swiper JS -->
+    <script src="js/swiper.min.js"></script>
 
     <!-- Custom scripts for this template -->
     <script src="js/resume.min.js"></script>

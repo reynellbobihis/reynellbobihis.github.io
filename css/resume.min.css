@@ -31,6 +31,30 @@ h1 {
 h2 {
   font-size: 3.5rem; }
 
+.swiper-container {
+  width: 100%; }
+  .r-swiper-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    color: #0070ad;
+    cursor: pointer; }
+  .r-swiper-button-prev {
+    right: 47px; }
+  .r-swiper-button.swiper-button-disabled {
+    cursor: default;
+    opacity: 0.1; }
+  .swiper-wrapper {
+    align-items: center;
+    margin-bottom: 50px; }
+  .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    background: #0070ad; }
 .card {
   overflow: hidden;
   box-shadow: 0 0 20px -7px #0000002C; }
@@ -63,11 +87,13 @@ h2 {
       align-items: center;
       justify-content: center;
       color: #686868;
-      font-size: 1.4rem; }
+      font-size: 1.4rem;
+      transition: 0.2s ease-out; }
       .portfolio-wd-item:nth-child(even) .card-button {
       	top: -30px; }
       .card-button:hover {
-      	color: #0070ad; }
+      	color: #0070ad;
+        box-shadow: 0px 16px 16px -20px #000000A0, 0px 1px 15px 0px #0003; }
     .card-text {
       font-size: 0.9rem; }
 
