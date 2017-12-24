@@ -31,6 +31,13 @@ h1 {
 h2 {
   font-size: 3.5rem; }
 
+.form-control:focus, .btn:focus {
+  border: 1px solid #ced4da;
+  box-shadow: 0 0 5px 0.2rem rgba(218, 218, 218, 0.3); }
+
+.btn {
+  cursor: pointer; }
+
 .swiper-container {
   width: 100%; }
   .r-swiper-button {
@@ -97,6 +104,8 @@ h2 {
     .card-text {
       font-size: 0.9rem; }
 
+.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255,255,255,.3); }
 
 .subheading {
   text-transform: uppercase;
