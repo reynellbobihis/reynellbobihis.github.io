@@ -31,12 +31,20 @@ h1 {
 h2 {
   font-size: 3.5rem; }
 
-.form-control:focus, .btn:focus {
-  border: 1px solid #ced4da;
-  box-shadow: 0 0 5px 0.2rem rgba(218, 218, 218, 0.3); }
-
-.btn {
-  cursor: pointer; }
+#gform .form-control, .btn {
+  border-radius: 0; }
+  #gform .form-control:focus {
+    border: 1px solid #ced4da;
+    box-shadow: 0 0 5px 0.2rem rgba(218, 218, 218, 0.3); }
+#gform .btn {
+  background: #00304a;
+  cursor: pointer;
+  color: white; }
+  #gform .btn:hover {
+    background: #0070ad; }
+  #gform .btn:focus {
+    border: none;
+    box-shadow: none; }
 
 .swiper-container {
   width: 100%; }
@@ -64,9 +72,12 @@ h2 {
     background: #0070ad; }
 .card {
   overflow: hidden;
-  box-shadow: 0 0 20px -7px #0000002C; }
+  box-shadow: 0 0 20px -7px #0000002C;
+  border-radius: 0; }
   .card:hover {
   	box-shadow: 0 0 20px -7px #0000004D; }
+  .card-img-top {
+    border-radius: 0; }
   .card-block {
     position: relative; }
     .card-block::before {
@@ -103,6 +114,36 @@ h2 {
         box-shadow: 0px 16px 16px -20px #000000A0, 0px 1px 15px 0px #0003; }
     .card-text {
       font-size: 0.9rem; }
+
+.swiper-container-graphics table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: -10px; }
+  .swiper-container-graphics table tbody tr td {
+    border: 10px solid transparent; }
+    .swiper-container-graphics table tbody tr td > div {
+      width: 100%;
+      background-size: cover;
+      background-position: center; }
+      .swiper-container-graphics table tbody tr td > div:after {
+        content: "";
+        display: block;
+        padding-bottom: 100%; }
+      .swiper-container-graphics table tbody tr td[colspan="2"] > div:after {
+        padding-bottom: calc(50% - 7px); }
+
+.swiper-container-graphics .portfolio-g-row {
+  justify-content: space-between; }
+  .swiper-container-graphics .portfolio-g-row .r-block {
+    flex-grow: 1; }
+    .swiper-container-graphics .portfolio-g-row .r-block .r-block-img {
+      width: 100%;
+      background-size: cover;
+      background-position: center; }
+      .swiper-container-graphics .portfolio-g-row .r-block .r-block-img:after {
+        content: "";
+        display: block;
+        padding-bottom: 100%; }
 
 .navbar-dark .navbar-nav .nav-link {
   color: rgba(255,255,255,.3); }
