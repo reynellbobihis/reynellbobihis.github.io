@@ -31,6 +31,13 @@ h1 {
 h2 {
   font-size: 3.5rem; }
 
+section:nth-child(even) {
+  background: #f4f4f4; }
+
+.navbar-dark .navbar-toggler {
+  color: white;
+  border: none; }
+
 #gform .form-control, .btn {
   border-radius: 0; }
   #gform .form-control:focus {
