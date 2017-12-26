@@ -68,6 +68,8 @@ h2 {
   .swiper-wrapper {
     align-items: center;
     margin-bottom: 50px; }
+    .swiper-slide {
+      width: calc(33.33% - 50px); }
   .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
     background: #0070ad; }
 .card {
@@ -118,19 +120,46 @@ h2 {
 .swiper-container-graphics table {
   width: 100%;
   border-collapse: collapse;
-  margin: -10px; }
+  margin: -5px; }
   .swiper-container-graphics table tbody tr td {
-    border: 10px solid transparent; }
+    border: 5px solid transparent; }
     .swiper-container-graphics table tbody tr td > div {
       width: 100%;
       background-size: cover;
-      background-position: center; }
+      background-position: center;
+      background-color: #fff;
+      filter: brightness(78%); }
       .swiper-container-graphics table tbody tr td > div:after {
         content: "";
         display: block;
-        padding-bottom: 100%; }
-      .swiper-container-graphics table tbody tr td[colspan="2"] > div:after {
-        padding-bottom: calc(50% - 7px); }
+        padding-bottom: 100%;
+        transition: 0.1s ease-out; }
+      .swiper-container-graphics table tbody tr td.r-gray > div:after {
+        background: #515151cc; }
+        .swiper-container-graphics table tbody tr td.r-gray:hover > div:after {
+          background: #515151; }
+      .swiper-container-graphics table tbody tr td.r-dark-blue > div:after {
+        background: #005583cc; }
+        .swiper-container-graphics table tbody tr td.r-dark-blue:hover > div:after {
+          background: #005583; }
+      .swiper-container-graphics table tbody tr td.r-medium-blue > div:after {
+        background: #00a5ffcc; }
+        .swiper-container-graphics table tbody tr td.r-medium-blue:hover > div:after {
+          background: #00a5ff; }
+      .swiper-container-graphics table tbody tr td.r-light-blue > div:after {
+        background: #00304Ab3; }
+        .swiper-container-graphics table tbody tr td.r-light-blue:hover > div:after {
+          background: #00304A; }
+      .swiper-container-graphics table tbody tr td.r-white > div:after {
+        background: #ffffffcc; }
+        .swiper-container-graphics table tbody tr td.r-white:hover > div:after {
+          background: #ffffff; }
+      .swiper-container-graphics table tbody tr:first-child td > div:after {
+        padding-bottom: 0; }
+      .swiper-container-graphics table tbody tr td[colspan="4"][rowspan="2"] > div:after {
+        padding-bottom: calc(50% - 4px); }
+      .swiper-container-graphics table tbody tr td[colspan="2"][rowspan="4"] > div:after {
+        padding-bottom: calc(200% + 5px); }
 
 .swiper-container-graphics .portfolio-g-row {
   justify-content: space-between; }
