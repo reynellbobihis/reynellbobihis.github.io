@@ -55,12 +55,11 @@ section:nth-child(even) {
 
 .r-portfolio {
   margin-top: -40px; }
-  .r-portfolio > h3 {
+  .r-portfolio .r-tab-button {
     position: relative;
     top: 40px;
     z-index: 2;
-    transition: 0.2s; }
-  .r-portfolio .r-tab-button {
+    transition: 0.2s;
     opacity: 0.2;
     cursor: pointer; }
     .r-portfolio .r-tab-button.active {
@@ -165,32 +164,12 @@ section:nth-child(even) {
       background-size: cover;
       background-position: center;
       background-color: #fff;
-      filter: brightness(90%); }
+      filter: brightness(95%); }
       .swiper-container-graphics table tbody tr td > div:after {
         content: "";
         display: block;
         padding-bottom: 100%;
         transition: 0.1s ease-out; }
-/*      .swiper-container-graphics table tbody tr td.r-gray > div:after {
-        background: #515151cc; }
-        .swiper-container-graphics table tbody tr td.r-gray:hover > div:after {
-          background: #515151; }
-      .swiper-container-graphics table tbody tr td.r-dark-blue > div:after {
-        background: #00304acc; }
-        .swiper-container-graphics table tbody tr td.r-dark-blue:hover > div:after {
-          background: #00304a; }
-      .swiper-container-graphics table tbody tr td.r-medium-blue > div:after {
-        background: #00a5ffcc; }
-        .swiper-container-graphics table tbody tr td.r-medium-blue:hover > div:after {
-          background: #00a5ff; }
-      .swiper-container-graphics table tbody tr td.r-light-blue > div:after {
-        background: #00304Ab3; }
-        .swiper-container-graphics table tbody tr td.r-light-blue:hover > div:after {
-          background: #00304A; }
-      .swiper-container-graphics table tbody tr td.r-white > div:after {
-        background: #ffffffcc; }
-        .swiper-container-graphics table tbody tr td.r-white:hover > div:after {
-          background: #ffffff; }*/
       .swiper-container-graphics table tbody tr:first-child td > div:after {
         padding-bottom: 0; }
       .swiper-container-graphics table tbody tr td[colspan="4"][rowspan="2"] > div:after {
