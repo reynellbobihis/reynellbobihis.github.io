@@ -102,7 +102,7 @@ section:nth-child(even) {
     opacity: 0.1; }
   .swiper-wrapper {
     align-items: center;
-    margin-bottom: 50px; }
+    margin-bottom: 70px; }
     .swiper-slide.portfolio-wd-item {
       width: calc(33.33% - 50px);
       margin-right: 50px; }
