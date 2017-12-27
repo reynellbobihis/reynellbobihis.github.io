@@ -53,6 +53,35 @@ section:nth-child(even) {
     border: none;
     box-shadow: none; }
 
+.r-portfolio {
+  margin-top: -40px; }
+  .r-portfolio > h3 {
+    position: relative;
+    top: 40px;
+    z-index: 2;
+    transition: 0.2s; }
+  .r-portfolio .r-tab-button {
+    opacity: 0.2;
+    cursor: pointer; }
+    .r-portfolio .r-tab-button.active {
+      opacity: 1; }
+  .r-portfolio .r-tab-content {
+    width: 100%;
+    position: relative; }
+    .r-portfolio .r-tab-content > div {
+      position: absolute;
+      width: 100%;
+      opacity: 0;
+      transition: 0s; }
+      .r-portfolio .r-tab-content > div.active {
+        position: relative;
+        opacity: 1;
+        transition: 0.5s; }
+
+#r-portfolio-graphics > .swiper-container,
+#r-portfolio-webdevelopment > .swiper-container {
+  padding-top: 70px !important; }
+
 .swiper-container {
   width: 100%; }
   .r-swiper-button {
@@ -75,8 +104,9 @@ section:nth-child(even) {
   .swiper-wrapper {
     align-items: center;
     margin-bottom: 50px; }
-    .swiper-slide {
-      width: calc(33.33% - 50px); }
+    .swiper-slide.portfolio-wd-item {
+      width: calc(33.33% - 50px);
+      margin-right: 50px; }
   .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
     background: #0070ad; }
 .card {
@@ -135,13 +165,13 @@ section:nth-child(even) {
       background-size: cover;
       background-position: center;
       background-color: #fff;
-      filter: brightness(78%); }
+      filter: brightness(90%); }
       .swiper-container-graphics table tbody tr td > div:after {
         content: "";
         display: block;
         padding-bottom: 100%;
         transition: 0.1s ease-out; }
-      .swiper-container-graphics table tbody tr td.r-gray > div:after {
+/*      .swiper-container-graphics table tbody tr td.r-gray > div:after {
         background: #515151cc; }
         .swiper-container-graphics table tbody tr td.r-gray:hover > div:after {
           background: #515151; }
@@ -160,7 +190,7 @@ section:nth-child(even) {
       .swiper-container-graphics table tbody tr td.r-white > div:after {
         background: #ffffffcc; }
         .swiper-container-graphics table tbody tr td.r-white:hover > div:after {
-          background: #ffffff; }
+          background: #ffffff; }*/
       .swiper-container-graphics table tbody tr:first-child td > div:after {
         padding-bottom: 0; }
       .swiper-container-graphics table tbody tr td[colspan="4"][rowspan="2"] > div:after {
