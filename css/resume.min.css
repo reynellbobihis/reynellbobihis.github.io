@@ -211,12 +211,12 @@ section:nth-child(even) {
     font-size: 1.75rem; }
 
 .list-icons {
-  font-size: 3rem;
-  transition: 0.1s ease-out; }
-  .list-icons:hover {
-    padding-bottom: 30px; }
+  font-size: 3rem; }
   .list-icons .list-inline-item {
-  	position: relative; }
+  	position: relative;
+    transition: 0.1s ease-out; }
+    .list-icons .list-inline-item:hover {
+      margin-bottom: 30px; }
     .list-icons .list-inline-item i.fa {
       position: relative;
       top: -6.5px;
@@ -294,7 +294,13 @@ section.resume-section {
   section.resume-section {
     min-height: 100vh; }
     section.resume-section .resume-item .resume-date {
-      min-width: 18rem; } }
+      min-width: 18rem; }
+  .list-icons {
+    transition: 0.1s ease-out; }
+    .list-icons:hover {
+        padding-bottom: 30px; }
+      .list-icons .list-inline-item:hover {
+        margin-bottom: 0; } }
 
 @media (min-width: 992px) {
   section.resume-section {
