@@ -115,7 +115,8 @@ section:nth-child(even) {
   .card:hover {
   	box-shadow: 0 0 20px -7px #0000004D; }
   .card-img-top {
-    border-radius: 0; }
+    border-radius: 0;
+    filter: brightness(90%); }
   .card-block {
     position: relative; }
     .card-block::before {
