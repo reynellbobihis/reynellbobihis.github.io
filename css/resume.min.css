@@ -50,7 +50,6 @@ section:nth-child(even) {
   #gform .btn:hover {
     background: #0070ad; }
   #gform .btn:focus {
-    border: none;
     box-shadow: none; }
 
 .r-portfolio {
