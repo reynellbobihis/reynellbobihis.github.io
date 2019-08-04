@@ -7,7 +7,16 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131763238-1"></script>
     <script src="js/md5.min.js"></script>
     <script>
-      if (md5(prompt('Enter password:')) !== '24f7ca5f6ff1a5afb9032aa5e533ad95') {
+      function getParameterByName(name, url) {
+          if (!url) url = window.location.href;
+          name = name.replace(/[\[\]]/g, '\\$&');
+          var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+              results = regex.exec(url);
+          if (!results) return null;
+          if (!results[2]) return '';
+          return decodeURIComponent(results[2].replace(/\+/g, ' '));
+      }
+      if (md5(getParameterByName('pass')) !== '24f7ca5f6ff1a5afb9032aa5e533ad95') {
         window.stop();
       }
       window.dataLayer = window.dataLayer || [];
